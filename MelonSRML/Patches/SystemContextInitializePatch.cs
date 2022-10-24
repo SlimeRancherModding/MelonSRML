@@ -6,6 +6,6 @@ namespace MelonSRML.Patches
     [HarmonyPatch(typeof(SystemContext), "Start")]
     internal static class SystemContextInitializePatch
     {
-        public static void Prefix(SystemContext __instance) => EntryPoint.onSystemContext(__instance);
+        public static void Prefix(SystemContext __instance) => EntryPoint.onSystemContext?.Invoke(__instance);
     }
 }

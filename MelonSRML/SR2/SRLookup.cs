@@ -22,11 +22,7 @@ namespace MelonSRML.SR2
         public static T GetCopy<T>(string name) where T : UnityEngine.Object => 
             UnityEngine.Object.Instantiate(Get<T>(name));
 
-        public static GameObject CopyPrefab(GameObject g)
-        {
-            Melon<EntryPoint>.Logger.Msg(EntryPoint.prefabParent == null);
-            return GameObject.Instantiate(g, EntryPoint.prefabParent);
-        }
+        public static GameObject CopyPrefab(GameObject g) => GameObject.Instantiate(g, EntryPoint.prefabParent);
 
         public static GameObject GetPrefabCopy(string name) => CopyPrefab(Get<GameObject>(name));
 

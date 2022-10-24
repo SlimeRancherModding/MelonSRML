@@ -1,9 +1,10 @@
 ﻿using MelonLoader;
 using MelonSRML.Patches;
 using MelonSRML.SR2.Slime;
-using System;
+using Il2CppSystem;
 using UnhollowerRuntimeLib;
 using UnityEngine;
+using System;
 
 namespace MelonSRML
 {
@@ -27,6 +28,21 @@ namespace MelonSRML
 
             ClassInjector.RegisterTypeInIl2Cpp<ModdedSlimeSubbehavior>();
             CustomSlimeSubbehaviorPatches.moddedType = Il2CppType.Of<ModdedSlimeSubbehavior>();
+        }
+
+        public override void OnPreModsLoaded()
+        {
+            OnMelonRegistered.Subscribe(x =>
+            {
+                if (x is SRMLMelonMod)
+                {
+                    SRMLMelonMod mod = (SRMLMelonMod)x;
+                    preRegister += mod.PreRegister;
+                    onSystemContext += mod.OnSystemContext;
+                    onGameContext += mod.OnGameContext;
+                    onSceneContext += mod.OnSceneContext;
+                }
+            });
         }
     }
 }

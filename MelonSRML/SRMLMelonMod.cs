@@ -4,14 +4,6 @@ namespace MelonSRML
 {
     public abstract class SRMLMelonMod : MelonMod
     {
-        public override void OnInitializeMelon()
-        {
-            EntryPoint.preRegister += PreRegister;
-            EntryPoint.onSystemContext += OnSystemContext;
-            EntryPoint.onGameContext += OnGameContext;
-            EntryPoint.onSceneContext += OnSceneContext;
-        }
-
         public virtual void PreRegister(AutoSaveDirector autoSaveDirector)
         {
         }

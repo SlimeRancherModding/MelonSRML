@@ -1,3 +1,6 @@
 MelonSRML/bin/
 MelonSRML/obj/
 .vs/
+.idea/
+*.user
+*.DotSettings

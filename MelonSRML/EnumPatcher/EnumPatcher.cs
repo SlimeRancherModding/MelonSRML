@@ -4,10 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
-using UnhollowerRuntimeLib;
-using Object = UnityEngine.Object;
 
-namespace MelonSRML.RelatedEnumPatch
+namespace MelonSRML.EnumPatcher
 {
     /// <summary>
     /// Allows adding values to any Enum
@@ -19,7 +17,6 @@ namespace MelonSRML.RelatedEnumPatch
 
         private static Dictionary<Type, EnumPatch> patches = new Dictionary<Type, EnumPatch>();
         private static Dictionary<int, EnumPatch> IL2CPPpatches = new Dictionary<int, EnumPatch>();
-
 
         static EnumPatcher()
         {
@@ -76,10 +73,12 @@ namespace MelonSRML.RelatedEnumPatch
         {
             cache.SetValue(enumType, null);
         }
+
         public static void ClearEnumCacheInIL2CPP(Il2CppSystem.Type enumType)
         {
             //IL2CPPcache.SetValue(enumType, null);
         }
+
         public static void AddEnumValue(Type enumType, object value, string name)
         {
             if (!enumType.IsEnum) throw new Exception($"{enumType} is not a valid Enum!");

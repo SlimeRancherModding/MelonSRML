@@ -19,22 +19,20 @@ namespace MelonSRML.Patches
             {
                 if ((x.name == "MainMenuFromBoot" && EntryPoint.interruptMenuLoad) || (x.isGameplay && EntryPoint.interruptGameLoad))
                 {
-                    var e = EntryPoint.error;
+                    LoadingError e = EntryPoint.error;
                     
                     // TODO: make better once a proper translation handler is made.
-                    var title = LocalizationUtil.GetTable("UI").AddEntry("m.srml_load_error.title", "mSRML Error");
-                    var titleString = new LocalizedString(LocalizationUtil.GetTable("UI").SharedData.TableCollectionNameGuid, title.SharedEntry.Id);
+                    StringTableEntry title = LocalizationUtil.GetTable("UI").AddEntry("m.srml_load_error.title", "mSRML Error");
+                    LocalizedString titleString = new LocalizedString(LocalizationUtil.GetTable("UI").SharedData.TableCollectionNameGuid, title.SharedEntry.Id);
 
-                    var error = LocalizationUtil.GetTable("UI").AddEntry("m.srml_load_error.error", 
+                    StringTableEntry error = LocalizationUtil.GetTable("UI").AddEntry("m.srml_load_error.error", 
                         $"{e.LoadingStep} error from '{e.ModName}': {e.Exception.Message}");
-                    var errorString = new LocalizedString(LocalizationUtil.GetTable("UI").SharedData.TableCollectionNameGuid, error.SharedEntry.Id);
+                    LocalizedString errorString = new LocalizedString(LocalizationUtil.GetTable("UI").SharedData.TableCollectionNameGuid, error.SharedEntry.Id);
 
-                    var exit = LocalizationUtil.GetTable("UI").AddEntry("m.srml_load_error.quit", "EXIT");
-                    var exitString = new LocalizedString(LocalizationUtil.GetTable("UI").SharedData.TableCollectionNameGuid, exit.SharedEntry.Id);
+                    StringTableEntry exit = LocalizationUtil.GetTable("UI").AddEntry("m.srml_load_error.quit", "EXIT");
+                    LocalizedString exitString = new LocalizedString(LocalizationUtil.GetTable("UI").SharedData.TableCollectionNameGuid, exit.SharedEntry.Id);
 
-
-                   
-                    GameContext.Instance.UITemplates.CreatePositivePopupPrompt( ScriptableObjectUtils.CreateScriptable(new Action<PositivePopupPromptConfig>(config =>
+                    GameContext.Instance.UITemplates.CreatePositivePopupPrompt(ScriptableObjectUtils.CreateScriptable(new Action<PositivePopupPromptConfig>(config =>
                     {
                         config.activateActionsDelay = 0;
                         config.expirationDuration = 0;
@@ -45,13 +43,15 @@ namespace MelonSRML.Patches
                         config.positiveButtonText = exitString;
 
                     })), new Action(Application.Quit));
+
+                    Error(e.Exception);
                 }
             });
 
             if (EntryPoint.interruptMenuLoad)
                 return;
 
-            foreach (var mod in EntryPoint.registeredMods)
+            foreach (SRMLMelonMod mod in EntryPoint.registeredMods)
             {
                 try
                 {

@@ -9,7 +9,6 @@ namespace MelonSRML
         public string ModName;
         public Step LoadingStep;
 
-
         public static void CreateLoadingError(MelonMod mod, Step loadingStep, Exception e)
         {
             EntryPoint.error = new LoadingError

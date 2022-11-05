@@ -1,14 +1,9 @@
-﻿using System;
-using MelonSRML.Patches;
+﻿using MelonSRML.Patches;
 using MelonSRML.SR2.Slime;
 using System.Collections.Generic;
 using System.Reflection;
-using MelonLoader;
-using MelonSRML.RelatedEnumPatch;
-using MelonSRML.SR2;
+using MelonSRML.EnumPatcher;
 using UnhollowerRuntimeLib;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace MelonSRML
 {
@@ -24,16 +19,12 @@ namespace MelonSRML
         internal static Transform prefabParent;
         public static Assembly execAssembly = Assembly.GetExecutingAssembly();
 
-        
-        
-
         public override void OnInitializeMelon()
         {
-            
             SystemContext.IsModded = true;
+            
             ClassInjector.RegisterTypeInIl2Cpp<ModdedSlimeSubbehavior>();
             CustomSlimeSubbehaviorPatches.moddedType = Il2CppType.Of<ModdedSlimeSubbehavior>();
-
         }
 
         public override void OnPreModsLoaded()
@@ -41,6 +32,7 @@ namespace MelonSRML
             OnMelonRegistered.Subscribe(x =>
             {
                 if (x is not SRMLMelonMod mod) return;
+
                 registeredMods.Add(mod);
                 EnumHolderResolver.RegisterAllEnums(mod);
             });

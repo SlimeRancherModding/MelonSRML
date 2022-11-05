@@ -71,12 +71,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EntryPoint.cs" />
-    <Compile Include="Extensions\GameObjectExtensions.cs" />
-    <Compile Include="Extensions\ObjectExtensions.cs" />
-    <Compile Include="RelatedEnumPatch\EnumHolderAttribute.cs" />
-    <Compile Include="RelatedEnumPatch\EnumHolderResolver.cs" />
-    <Compile Include="RelatedEnumPatch\EnumInfoPatch.cs" />
-    <Compile Include="RelatedEnumPatch\EnumPatcher.cs" />
+    <Compile Include="Utils\Extensions\GameObjectExtensions.cs" />
+    <Compile Include="Utils\Extensions\ObjectExtensions.cs" />
+    <Compile Include="EnumPatcher\EnumHolderAttribute.cs" />
+    <Compile Include="EnumPatcher\EnumHolderResolver.cs" />
+    <Compile Include="EnumPatcher\EnumInfoPatch.cs" />
+    <Compile Include="EnumPatcher\EnumPatcher.cs" />
     <Compile Include="LoadingError.cs" />
     <Compile Include="Patches\DisablePopupErrorPatch.cs" />
     <Compile Include="Patches\GameContextModEventPatch.cs" />
@@ -95,12 +95,7 @@
     <Compile Include="Utils\ScriptableObjectUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\..\..\Unity\mSRML\Assets\AssetBundles\melonsrml">
-      <Link>melonsrml</Link>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SR2\MainMenu" />
+    <Folder Include="SR2\MainMenu\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

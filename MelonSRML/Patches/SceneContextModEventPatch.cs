@@ -11,7 +11,7 @@ namespace MelonSRML.Patches
             if (EntryPoint.interruptGameLoad)
                 return;
 
-            foreach (SRMLMelonMod mod in EntryPoint.registeredMods)
+            foreach (var mod in EntryPoint.registeredMods)
             {
                 try
                 {

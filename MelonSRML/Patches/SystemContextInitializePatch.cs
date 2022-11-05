@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Localization.Tables;
 using UnityEngine.Localization;
 using Il2CppMonomiPark.SlimeRancher.UI.Popup;
+using MelonSRML.Utils;
 
 namespace MelonSRML.Patches
 {
@@ -18,36 +19,39 @@ namespace MelonSRML.Patches
             {
                 if ((x.name == "MainMenuFromBoot" && EntryPoint.interruptMenuLoad) || (x.isGameplay && EntryPoint.interruptGameLoad))
                 {
-                    LoadingError e = EntryPoint.error;
+                    var e = EntryPoint.error;
                     
                     // TODO: make better once a proper translation handler is made.
-                    StringTableEntry title = LocalizationUtil.GetTable("UI").AddEntry("m.srml_load_error.title", "mSRML Error");
-                    LocalizedString titleString = new LocalizedString(LocalizationUtil.GetTable("UI").SharedData.TableCollectionNameGuid, title.SharedEntry.Id);
+                    var title = LocalizationUtil.GetTable("UI").AddEntry("m.srml_load_error.title", "mSRML Error");
+                    var titleString = new LocalizedString(LocalizationUtil.GetTable("UI").SharedData.TableCollectionNameGuid, title.SharedEntry.Id);
 
-                    StringTableEntry error = LocalizationUtil.GetTable("UI").AddEntry("m.srml_load_error.error", 
+                    var error = LocalizationUtil.GetTable("UI").AddEntry("m.srml_load_error.error", 
                         $"{e.LoadingStep} error from '{e.ModName}': {e.Exception.Message}");
-                    LocalizedString errorString = new LocalizedString(LocalizationUtil.GetTable("UI").SharedData.TableCollectionNameGuid, error.SharedEntry.Id);
+                    var errorString = new LocalizedString(LocalizationUtil.GetTable("UI").SharedData.TableCollectionNameGuid, error.SharedEntry.Id);
 
-                    StringTableEntry exit = LocalizationUtil.GetTable("UI").AddEntry("m.srml_load_error.quit", "EXIT");
-                    LocalizedString exitString = new LocalizedString(LocalizationUtil.GetTable("UI").SharedData.TableCollectionNameGuid, exit.SharedEntry.Id);
+                    var exit = LocalizationUtil.GetTable("UI").AddEntry("m.srml_load_error.quit", "EXIT");
+                    var exitString = new LocalizedString(LocalizationUtil.GetTable("UI").SharedData.TableCollectionNameGuid, exit.SharedEntry.Id);
 
-                    GameContext.Instance.UITemplates.CreatePositivePopupPrompt(new PositivePopupPromptConfig()
+
+                   
+                    GameContext.Instance.UITemplates.CreatePositivePopupPrompt( ScriptableObjectUtils.CreateScriptable(new Action<PositivePopupPromptConfig>(config =>
                     {
-                        activateActionsDelay = 0,
-                        expirationDuration = 0,
-                        expires = false,
-                        message = errorString,
-                        shouldDimBackground = true,
-                        title = titleString,
-                        positiveButtonText = exitString
-                    }, new Action(() => Application.Quit()));
+                        config.activateActionsDelay = 0;
+                        config.expirationDuration = 0;
+                        config.expires = false;
+                        config.message = errorString;
+                        config.shouldDimBackground = true;
+                        config.title = titleString;
+                        config.positiveButtonText = exitString;
+
+                    })), new Action(Application.Quit));
                 }
             });
 
             if (EntryPoint.interruptMenuLoad)
                 return;
 
-            foreach (SRMLMelonMod mod in EntryPoint.registeredMods)
+            foreach (var mod in EntryPoint.registeredMods)
             {
                 try
                 {

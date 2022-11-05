@@ -56,7 +56,7 @@ namespace MelonSRML.Patches
             {
                 if (__instance.GetIl2CppType().BaseType == moddedType)
                 {
-                    __instance.TryCast<ModdedSlimeSubbehavior>().ModdedSelected();
+                    __instance.TryCast<ModdedSlimeSubbehavior>().ModdedDeselected();
                     return false;
                 }
                 return true;
@@ -91,7 +91,7 @@ namespace MelonSRML.Patches
             }
         }*/
 
-        [HarmonyPatch(typeof(RockSlimeRoll), "Selected")]
+        [HarmonyPatch(typeof(RockSlimeRoll), "Awake")]
         public static class AwakePatch
         {
             public static void Prefix(RockSlimeRoll __instance)

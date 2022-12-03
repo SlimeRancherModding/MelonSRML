@@ -7,29 +7,24 @@ namespace MelonSRML
     {
         public Exception Exception;
         public string ModName;
-        public Step LoadingStep;
+        public MSRModLoader.Step LoadingStep;
 
-        public static void CreateLoadingError(MelonMod mod, Step loadingStep, Exception e)
+        public static void CreateLoadingError(MelonMod mod, MSRModLoader.Step loadingStep, Exception e)
         {
+
             EntryPoint.error = new LoadingError
             {
                 Exception = e,
                 LoadingStep = loadingStep,
-                ModName = mod.Info.Name
+                ModName =  mod.Info == null ? "mSRML Mod Test" : mod.Info.Name,
             };
 
-            if (loadingStep == Step.OnSceneContext)
+            if (loadingStep == MSRModLoader.Step.OnSceneContext)
                 EntryPoint.interruptGameLoad = true;
             else
                 EntryPoint.interruptMenuLoad = true;
         }
 
-        public enum Step
-        {
-            PreRegister,
-            OnSystemContext,
-            OnGameContext,
-            OnSceneContext
-        }
+       
     }
 }

@@ -5,14 +5,16 @@ using MelonSRML.SR2;
 namespace MelonSRML.Patches
 {
     [HarmonyPatch(typeof(LoadGameBehaviorModel), nameof(LoadGameBehaviorModel.Image), MethodType.Getter)]
-    public static class LoadGameBehaviorModelImagePatch
+    internal static class LoadGameBehaviorModelImagePatch
     {
+        private static Sprite iconDot;
         public static bool Prefix(LoadGameBehaviorModel __instance, ref Sprite __result)
         {
+            iconDot ??= SRLookup.Get<Sprite>("iconDot");
             if (__instance.GameDataSummary.iconId is not null)
                 return true;
 
-            __result = SRLookup.Get<Sprite>("iconDot");
+            __result = iconDot;
             return false;
         }
     }

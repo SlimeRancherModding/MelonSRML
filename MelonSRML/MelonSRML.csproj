@@ -9,10 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MelonSRML</RootNamespace>
     <AssemblyName>MelonSRML</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <LangVersion>10</LangVersion>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,6 +41,9 @@
     <Reference Include="Il2Cppmscorlib">
       <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\Il2Cppmscorlib.dll</HintPath>
     </Reference>
+    <Reference Include="Il2CppSystem.Core">
+      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\Il2CppSystem.Core.dll</HintPath>
+    </Reference>
     <Reference Include="MelonLoader">
       <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\MelonLoader.dll</HintPath>
     </Reference>
@@ -62,6 +65,9 @@
     <Reference Include="UnityEngine.Il2CppAssetBundleManager">
       <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\UnityEngine.Il2CppAssetBundleManager.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.Il2CppImageConversionManager">
+      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\UnityEngine.Il2CppImageConversionManager.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -71,7 +77,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EntryPoint.cs" />
+    <Compile Include="EnumPatcher\IdentifiableCategorizationAttribute.cs" />
+    <Compile Include="EnumPatcher\IdentifiableTypeAttribute.cs" />
+    <Compile Include="EnumPatcher\IdentifiableTypeResolver.cs" />
+    <Compile Include="MSRModLoader.cs" />
+    <Compile Include="Patches\AnalyticsUtilReportPerIdentifiableDataPatch.cs" />
+    <Compile Include="Patches\LandPlotApplyUpgradesPatch.cs" />
+    <Compile Include="Patches\LandPlotUIActivatorSetupUIPatch.cs" />
+    <Compile Include="Patches\LocalizationDirectorLoadTablePatch.cs" />
+    <Compile Include="Patches\PediaDirectorAwakePatch.cs" />
+    <Compile Include="Patches\ScriptableObjectCreateInstancePatch.cs" />
+    <Compile Include="SR2\FoodGroupRegistry.cs" />
+    <Compile Include="SR2\PediaRegistry.cs" />
+    <Compile Include="SR2\Ranch\LandPlotRegistry.cs" />
+    <Compile Include="SR2\Ranch\LandPlotUpgradeRegistry.cs" />
+    <Compile Include="SR2\Ranch\ModdedPlotUpgrader.cs" />
+    <Compile Include="SR2\Slime\SlimeRegistry.cs" />
+    <Compile Include="SR2\TranslationPatcher.cs" />
+    <Compile Include="Utils\ColorUtils.cs" />
+    <Compile Include="Utils\EnumUtils.cs" />
     <Compile Include="Utils\Extensions\GameObjectExtensions.cs" />
+    <Compile Include="Utils\Extensions\IdentifiableTypeListExtensions.cs" />
+    <Compile Include="Utils\Extensions\ListExtensions.cs" />
     <Compile Include="Utils\Extensions\ObjectExtensions.cs" />
     <Compile Include="EnumPatcher\EnumHolderAttribute.cs" />
     <Compile Include="EnumPatcher\EnumHolderResolver.cs" />
@@ -82,7 +109,7 @@
     <Compile Include="Patches\GameContextModEventPatch.cs" />
     <Compile Include="Patches\LoadGameBehaviorModelImagePatch.cs" />
     <Compile Include="Patches\SaveSystem\GameModelInitializeLandPlotModel.cs" />
-    <Compile Include="Patches\SaveSystem\SavedGamePush.cs" />
+    <Compile Include="Patches\SaveSystem\SavedGamePushPatch.cs" />
     <Compile Include="Patches\SceneContextModEventPatch.cs" />
     <Compile Include="Patches\SystemContextInitializePatch.cs" />
     <Compile Include="Patches\AutoSaveDirectorRegistryPatch.cs" />
@@ -91,11 +118,10 @@
     <Compile Include="SR2\Slime\ModdedSlimeSubbehavior.cs" />
     <Compile Include="SR2\SRLookup.cs" />
     <Compile Include="SRMLMelonMod.cs" />
-    <Compile Include="usings.cs" />
+    <Compile Include="Utils\Extensions\StringExtensions.cs" />
+    <Compile Include="Utils\GarbageCollectorUtils.cs" />
     <Compile Include="Utils\ScriptableObjectUtils.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SR2\MainMenu\" />
+    <Compile Include="Utils\TextureUtils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

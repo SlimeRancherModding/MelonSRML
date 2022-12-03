@@ -7,9 +7,20 @@ namespace MelonSRML.EnumPatcher
 {
     public class EnumHolderResolver
     {
-        public static void RegisterAllEnums(SRMLMelonMod mod)
+        public static void RegisterAllEnums(SRMLMelonMod mod = null)
         {
-            foreach (Module module in mod.MelonAssembly.Assembly.Modules)
+
+            Assembly melonAssemblyAssembly = null;
+            if (mod is not null)
+            {
+                melonAssemblyAssembly = mod.MelonAssembly.Assembly;
+            }
+            else
+            {
+                melonAssemblyAssembly = Melon<EntryPoint>.Instance.MelonAssembly.Assembly;
+            }
+            
+            foreach (Module module in melonAssemblyAssembly.Modules)
             {
                 foreach (Type type in module.GetTypes())
                 {

@@ -18,7 +18,7 @@ namespace MelonSRML.SR2
             if (!collected.ContainsKey(selected))
                 collected.Add(selected, Resources.FindObjectsOfTypeAll(selected).ToList());
 
-            return collected[selected].Find(x => x.name == name).Cast<T>();
+            return collected[selected].Find(x => x.name == name)?.Cast<T>();
         }
         public static T GetCopy<T>(string name) where T : Object => 
             Object.Instantiate(Get<T>(name));

@@ -10,7 +10,7 @@ namespace MelonSRML.Patches
         {
             if (EntryPoint.interruptGameLoad)
                 return;
-
+            MSRModLoader.CurrentLoadingStep = MSRModLoader.Step.OnSceneContext;
             foreach (SRMLMelonMod mod in EntryPoint.registeredMods)
             {
                 try
@@ -19,7 +19,7 @@ namespace MelonSRML.Patches
                 }
                 catch (Exception e)
                 {
-                    LoadingError.CreateLoadingError(mod, LoadingError.Step.OnSceneContext, e);
+                    LoadingError.CreateLoadingError(mod, MSRModLoader.CurrentLoadingStep, e);
                     EntryPoint.interruptGameLoad = true;
 
                     break;

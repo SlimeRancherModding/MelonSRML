@@ -1,9 +1,10 @@
 ﻿using HarmonyLib;
 using MelonSRML.SR2.Slime;
+using UnhollowerRuntimeLib;
 
 namespace MelonSRML.Patches
 {
-    public static class CustomSlimeSubbehaviorPatches
+    internal static class CustomSlimeSubbehaviorPatches
     {
         internal static Il2CppSystem.Type moddedType;
 
@@ -77,19 +78,7 @@ namespace MelonSRML.Patches
             }
         }
 
-        /*[HarmonyPatch(typeof(RockSlimeRoll), "Forbids")]
-        public static class ForbidsPatch
-        {
-            public static bool Prefix(RockSlimeRoll __instance, ModdedSubbehaviour toMaybeForbid, ref bool __result)
-            {
-                if (__instance.GetIl2CppType() == UnhollowerRuntimeLib.Il2CppType.Of<ModdedSlimeSubbehavior>())
-                {
-                    __result = __instance.TryCast<ModdedSlimeSubbehavior>().ModdedForbids(toMaybeForbid);
-                    return false;
-                }
-                return true;
-            }
-        }*/
+     
 
         [HarmonyPatch(typeof(RockSlimeRoll), "Awake")]
         public static class AwakePatch

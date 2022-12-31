@@ -41,3 +41,4 @@ using System.Runtime.InteropServices;
 [assembly: MelonInfo(typeof(EntryPoint), "mSRML", "1.0.0", "The SR Modding Team")]
 [assembly: MelonColor(ConsoleColor.Blue)]
 [assembly: MelonGame("MonomiPark", "SlimeRancher2")]
+[assembly: HarmonyDontPatchAll]

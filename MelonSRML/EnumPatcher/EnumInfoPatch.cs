@@ -12,11 +12,13 @@ namespace MelonSRML.EnumPatcher
     {
         public static void Postfix(Il2CppSystem.RuntimeType enumType, ref Il2CppSystem.Enum.ValuesAndNames __result)
         {
+            
             ulong[] il2CppStructArray = __result.Values;
             string[] il2CppStringArray = __result.Names;
             FixEnum(enumType, ref il2CppStructArray, ref il2CppStringArray);
             __result = new Enum.ValuesAndNames(il2CppStructArray, il2CppStringArray);
         }
+
         static void FixEnum(Il2CppSystem.Object type, ref ulong[] oldValues, ref string[] oldNames)
         {
             Il2CppSystem.Type enumType = type.Cast<Il2CppSystem.Type>();

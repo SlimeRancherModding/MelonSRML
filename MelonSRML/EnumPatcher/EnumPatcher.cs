@@ -44,7 +44,7 @@ namespace MelonSRML.EnumPatcher
             var allValues = Il2CppSystem.Enum.GetValues(enumType);
             for (var i = 0; i < allValues.Length - 1; i++)
             {
-                if ((int)Il2CppSystem.Convert.ToInt32(allValues.GetValue(i + 1)) - (int)Il2CppSystem.Convert.ToInt32(allValues.GetValue(i)) >1)
+                if (Il2CppSystem.Convert.ToInt32(allValues.GetValue(i + 1)) - (int)Il2CppSystem.Convert.ToInt32(allValues.GetValue(i)) >1)
                 {
                     return Il2CppSystem.Enum.ToObject(enumType, Il2CppSystem.Convert.ToInt32(allValues.GetValue(i)) + 1);
                 }
@@ -83,7 +83,7 @@ namespace MelonSRML.EnumPatcher
         {
             if (!enumType.IsEnum) throw new Exception($"{enumType} is not a valid Enum!");
 
-            value = (ulong)Convert.ToInt64(value, CultureInfo.InvariantCulture);
+            value = (ulong)Convert.ToUInt64(value, CultureInfo.InvariantCulture);
             if (!patches.TryGetValue(enumType, out var patch))
             {
                 patch = new EnumPatch();

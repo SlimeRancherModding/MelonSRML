@@ -17,9 +17,9 @@ public static class GameObjectExtensions
       bool noDive = false)
     {
         GameObject childWithPartialName = null;
-        foreach (Transform o in obj.transform)
+        foreach (var @object in obj.transform)
         {
-            Transform transform = o.Cast<Transform>();
+            Transform transform = @object.Cast<Transform>();
             if (transform.name.StartsWith(name))
             {
                 childWithPartialName = transform.gameObject;
@@ -42,25 +42,28 @@ public static class GameObjectExtensions
             return obj.transform.Find(name).gameObject;
 
         GameObject child = null;
-        foreach (var o in obj?.transform)
-        {
-            Transform transform = o.Cast<Transform>();
-
-            if (!(transform == null))
+        if (obj.transform != null)
+            foreach (var o in obj.transform)
             {
-                if (transform.name.Equals(name))
+                Transform transform = o.Cast<Transform>();
+
+                if (!(transform == null))
                 {
-                    child = transform.gameObject;
-                    break;
-                }
-                if (transform.childCount > 0)
-                {
-                    child = transform.gameObject.FindChild(name, dive);
-                    if (child != null)
+                    if (transform.name.Equals(name))
+                    {
+                        child = transform.gameObject;
                         break;
+                    }
+
+                    if (transform.childCount > 0)
+                    {
+                        child = transform.gameObject.FindChild(name, dive);
+                        if (child != null)
+                            break;
+                    }
                 }
             }
-        }
+
         return child;
     }
 
@@ -70,7 +73,7 @@ public static class GameObjectExtensions
       bool noDive = false)
     {
         List<GameObject> gameObjectList = new List<GameObject>();
-        foreach (Transform o in obj.transform)
+        foreach (var o in obj.transform)
         {
             Transform transform = o.Cast<Transform>();
             if (transform.name.StartsWith(name))
@@ -84,7 +87,7 @@ public static class GameObjectExtensions
     public static GameObject[] FindChildren(this GameObject obj, string name, bool noDive = false)
     {
         List<GameObject> gameObjectList = new List<GameObject>();
-        foreach (Transform o in obj.transform)
+        foreach (var o in obj.transform)
         {
             Transform transform = o.Cast<Transform>();
             if (transform.name.Equals(name))

@@ -11,11 +11,8 @@ using MelonSRML.SR2.Ranch;
 using UnhollowerBaseLib;
 using UnhollowerRuntimeLib;
 
-
 namespace MelonSRML
 {
-   
-
     internal class EntryPoint : MelonPlugin
     {
         internal static List<SRMLMelonMod> registeredMods = new List<SRMLMelonMod>();
@@ -28,22 +25,17 @@ namespace MelonSRML
         public static Assembly execAssembly = Assembly.GetExecutingAssembly();
         internal static MethodInfo TryCast = AccessTools.Method(typeof(Il2CppObjectBase), nameof(Il2CppObjectBase.TryCast));
 
-
-
-        public override void OnInitializeMelon ()
+        public override void OnInitializeMelon()
         {
-          
             ClassInjector.RegisterTypeInIl2Cpp<ModdedSlimeSubbehavior>();
             ClassInjector.RegisterTypeInIl2Cpp<ModdedPlotUpgrader>();
             CustomSlimeSubbehaviorPatches.moddedType = Il2CppType.Of<ModdedSlimeSubbehavior>();
             HarmonyInstance.PatchAll();
             SystemContext.IsModded = true;
-
         }
 
         public override void OnPreModsLoaded()
         {
-            
             OnMelonRegistered.Subscribe(x =>
             {
                 if (x is not SRMLMelonMod mod) return;

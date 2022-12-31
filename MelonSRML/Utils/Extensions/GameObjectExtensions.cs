@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MelonSRML;
 using MelonSRML.SR2;
 using UnhollowerRuntimeLib;
 
@@ -149,7 +150,10 @@ public static class GameObjectExtensions
     public static bool HasComponent(this GameObject go, string name) => go.GetComponent(name) != null;
 
     public static GameObject InstantiateInactive(this GameObject go, bool keepOriginalName = false) => SRLookup.InstantiateInactive(go, keepOriginalName);
+
     public static void Activate(this GameObject go) => go.SetActive(true);
 
     public static void Deactivate(this GameObject go) => go.SetActive(false);
+
+    public static void Prefabitize(this GameObject go) => go.transform.SetParent(EntryPoint.prefabParent);
 }

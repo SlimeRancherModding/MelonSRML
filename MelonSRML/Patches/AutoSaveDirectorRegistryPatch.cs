@@ -1,9 +1,6 @@
 ﻿using HarmonyLib;
 using System;
 using MelonSRML.EnumPatcher;
-using MelonSRML.SR2;
-using MelonSRML.Utils;
-using UnityEngine.Localization;
 
 namespace MelonSRML.Patches
 {

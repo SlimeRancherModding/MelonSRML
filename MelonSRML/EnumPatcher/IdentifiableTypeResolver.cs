@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Il2CppInterop.Runtime;
 using Il2CppMonomiPark.SlimeRancher;
 using MelonSRML.SR2;
-using UnhollowerBaseLib;
-using UnhollowerRuntimeLib;
 
 namespace MelonSRML.EnumPatcher
 {
@@ -24,12 +23,9 @@ namespace MelonSRML.EnumPatcher
 
         public static void CategorizeAllIdentifiables()
         {
-            foreach (IdentifiableType t in moddedTypes)
+            foreach (var t in moddedTypes.Where(t => IdentifiableCategorization.doNotCategorize.Contains(t)))
             {
-                if (IdentifiableCategorization.doNotCategorize.Contains(t))
-                    continue;
-
-                // TODO: auto-categorize
+                continue;
             }
         }
 
@@ -48,65 +44,39 @@ namespace MelonSRML.EnumPatcher
             }
             Assembly melonAssemblyAssembly = mod is not null ? mod.MelonAssembly.Assembly : Melon<EntryPoint>.Instance.MelonAssembly.Assembly;
             
+            
             foreach (Module module in melonAssemblyAssembly.Modules)
             {
                 foreach (Type type in module.GetTypes())
                 {
-                    if (!type.GetCustomAttributes(true).Any((x) => x is IdentifiableTypeHolderAttribute)) 
-                        continue;
+                    if (!type.GetCustomAttributes(true).Any((x) => x is IdentifiableTypeHolderAttribute)) continue;
                     IdentifiableTypeHolderAttribute identifiableTypeHolder = type.GetCustomAttribute<IdentifiableTypeHolderAttribute>();
-
-                    foreach (FieldInfo field in type.GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).Where(info => Il2CppType.From(info.FieldType) != null))
+                    foreach (FieldInfo field in type.GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).Where(info => Il2CppType.From(info.FieldType, false) != null))
                     {
-                        Type fieldFieldType = field.FieldType;
                         bool shouldRegister = identifiableTypeHolder.shouldRegister;
-
+                        
                         if (field.GetValue(null) != null)
-                            return;
-                        if (fieldFieldType.IsSubclassOf(typeof(ScriptableObject)) == false) 
                             continue;
-                        if (fieldFieldType.BaseType == null) 
-                            continue;
-                        Il2CppObjectBase scriptableObject;
-                        switch (fieldFieldType.BaseType.Name)
-                        {
-                            case nameof(ScriptableObject) when fieldFieldType.Name.Equals(nameof(IdentifiableType)):
-                            case nameof(IdentifiableType):
-                            {
-                                var identifiableType = ScriptableObject.CreateInstance(Il2CppType.From(fieldFieldType)).Cast<IdentifiableType>();
-                                identifiableType.name = field.Name;
-                                var scriptableObjectReferenceId = identifiableType.ReferenceId;
-                                scriptableObject = identifiableType;
-                                break;
-                            }
-                            default:
-                            {
-                                scriptableObject = null;
-                                break;
-                            }
-                        }
-
-                        if (scriptableObject is null)
+                        
+                        if (!typeof(IdentifiableType).IsAssignableFrom(field.FieldType)) continue;
+                        var identifiableType = ScriptableObject.CreateInstance(Il2CppType.From(field.FieldType)).Cast<IdentifiableType>();
+                        identifiableType.name = field.Name;
+                        var scriptableObjectReferenceId = identifiableType.ReferenceId;
+                        if (identifiableType is null)
                         {
                             Error($"Error when trying to create IdentifiableType '{field.Name}' for mod '{mod?.Info.Name}'");
                             continue;
                         }
-                        if (!fieldFieldType.Name.Equals(nameof(IdentifiableType)))
+                        if (field.FieldType == typeof(IdentifiableType))
                         {
-                            try
-                            {
-                                scriptableObject = (Il2CppObjectBase)EntryPoint.TryCast.MakeGenericMethod(fieldFieldType).Invoke(scriptableObject, Array.Empty<object>());
-
-                            }
-                            catch (Exception e)
-                            {
-                                continue;
-                            }
+                            field.SetValue(null, identifiableType);
                         }
-                        if (scriptableObject is null) continue;
-                        
-                        field.SetValue(null, scriptableObject);
-                        IdentifiableType cast = scriptableObject.Cast<IdentifiableType>();
+                        else
+                        {
+                            var invoke = EntryPoint.TryCast.MakeGenericMethod(field.FieldType).Invoke(identifiableType, Array.Empty<object>());
+                            
+                            field.SetValue(null, invoke);
+                        }
 
                         foreach (var att in field.GetCustomAttributes())
                             if (att is IdentifiableCategorization attribute)
@@ -116,13 +86,14 @@ namespace MelonSRML.EnumPatcher
                                 if (IGNORE_REGISTER.Any(x => attribute.rules.HasFlag(x)))
                                     shouldRegister = false;
 
-                                cast.SetRule(attribute.rules);
-                                IdentifiableCategorization.doNotCategorize.Add(cast);
+                                identifiableType.SetRule(attribute.rules);
+                                IdentifiableCategorization.doNotCategorize.Add(identifiableType);
                             }
 
                         if (shouldRegister)
-                            dir.identifiableTypes.AddIfNotContaining(cast);
+                            dir.identifiableTypes.AddIfNotContaining(identifiableType);
                     }
+                    
                 }
             }
         }

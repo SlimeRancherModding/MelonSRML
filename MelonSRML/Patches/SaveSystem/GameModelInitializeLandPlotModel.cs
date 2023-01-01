@@ -1,8 +1,8 @@
 ﻿using System;
 using HarmonyLib;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Il2CppMonomiPark.SlimeRancher.DataModel;
 using Il2CppSystem.Collections.Generic;
-using UnhollowerBaseLib;
 
 namespace MelonSRML.Patches.SaveSystem
 {

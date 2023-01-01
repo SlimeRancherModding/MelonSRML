@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine.Localization;
 
 namespace MelonSRML.SR2.Ranch
@@ -10,7 +9,7 @@ namespace MelonSRML.SR2.Ranch
         internal static readonly List<LandPlotShopEntry> moddedLandPlotShopEntries = new List<LandPlotShopEntry>();
         public struct LandPlotShopEntry
         {
-            public global::LandPlot.Id plot;
+            public LandPlot.Id plot;
             public Sprite icon;
             public int cost;
             public PediaEntry pediaEntry;
@@ -26,7 +25,7 @@ namespace MelonSRML.SR2.Ranch
 
         public static void RegisterPurchasableLandPlot(LandPlotShopEntry entry, GameObject prefab)
         {
-            SRSingleton<GameContext>.Instance.LookupDirector.plotPrefabs.AddAndRemoveRangeWhere(new[] { prefab }, (o, gameObject) => o.GetComponentInChildren<global::LandPlot>().typeId == gameObject.GetComponentInChildren<global::LandPlot>().typeId);
+            SRSingleton<GameContext>.Instance.LookupDirector.plotPrefabs.AddAndRemoveRangeWhere(new[] { prefab }, (o, gameObject) => o.GetComponentInChildren<LandPlot>().typeId == gameObject.GetComponentInChildren<LandPlot>().typeId);
             var typeId = prefab.GetComponentInChildren<LandPlot>().typeId;
             if (SRSingleton<GameContext>.Instance.LookupDirector.plotPrefabDict.ContainsKey(typeId))
             {

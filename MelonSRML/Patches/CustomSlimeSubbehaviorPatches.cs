@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 using MelonSRML.SR2.Slime;
-using UnhollowerRuntimeLib;
 
 namespace MelonSRML.Patches
 {

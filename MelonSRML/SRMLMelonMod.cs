@@ -1,6 +1,4 @@
-﻿using MelonLoader;
-
-namespace MelonSRML
+﻿namespace MelonSRML
 {
     public abstract class SRMLMelonMod : MelonMod
     {

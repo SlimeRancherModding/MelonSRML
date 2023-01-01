@@ -1,9 +1,7 @@
 ﻿using Il2CppSystem;
-using MelonLoader;
 using System.Collections.Generic;
 using System.Linq;
-using UnhollowerRuntimeLib;
-using UnityEngine;
+using Il2CppInterop.Runtime;
 using Object = UnityEngine.Object;
 
 namespace MelonSRML.SR2

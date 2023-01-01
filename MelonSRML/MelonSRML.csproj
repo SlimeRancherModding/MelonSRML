@@ -1,127 +1,63 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{76C64925-83FE-4220-8281-EC562AA52530}</ProjectGuid>
+    <TargetFramework>net6.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MelonSRML</RootNamespace>
-    <AssemblyName>MelonSRML</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
     <LangVersion>preview</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\0Harmony.dll</HintPath>
+      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\net6\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Il2CppAssemblies\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2CppInterop.Common">
+      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\net6\Il2CppInterop.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2CppInterop.Runtime">
+      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\net6\Il2CppInterop.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Il2Cppmscorlib">
-      <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\Il2Cppmscorlib.dll</HintPath>
+      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Il2CppAssemblies\Il2Cppmscorlib.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppSystem.Core">
-      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\Il2CppSystem.Core.dll</HintPath>
+      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Il2CppAssemblies\Il2CppSystem.Core.dll</HintPath>
     </Reference>
     <Reference Include="MelonLoader">
-      <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\MelonLoader.dll</HintPath>
-    </Reference>
-    <Reference Include="UnhollowerBaseLib">
-      <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\UnhollowerBaseLib.dll</HintPath>
+      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\net6\MelonLoader.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Localization">
-      <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\Unity.Localization.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Il2CppAssemblies\Unity.Localization.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Il2CppAssemblies\UnityEngine.AssetBundleModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Il2CppAssemblies\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Il2CppAssetBundleManager">
-      <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\UnityEngine.Il2CppAssetBundleManager.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Il2CppImageConversionManager">
-      <HintPath>E:\Steam\steamapps\common\Slime Rancher 2\MelonLoader\Managed\UnityEngine.Il2CppImageConversionManager.dll</HintPath>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Il2CppAssemblies\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\UnityEngine.UI.dll</HintPath>
+      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Il2CppAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
-      <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\UnityEngine.UIModule.dll</HintPath>
+      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Il2CppAssemblies\UnityEngine.UIModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EntryPoint.cs" />
-    <Compile Include="EnumPatcher\IdentifiableCategorization.cs" />
-    <Compile Include="EnumPatcher\IdentifiableTypeAttribute.cs" />
-    <Compile Include="EnumPatcher\IdentifiableTypeResolver.cs" />
-    <Compile Include="MSRModLoader.cs" />
-    <Compile Include="Patches\AnalyticsUtilReportPerIdentifiableDataPatch.cs" />
-    <Compile Include="Patches\LandPlotApplyUpgradesPatch.cs" />
-    <Compile Include="Patches\LandPlotUIActivatorSetupUIPatch.cs" />
-    <Compile Include="Patches\LocalizationDirectorLoadTablePatch.cs" />
-    <Compile Include="Patches\PediaDirectorAwakePatch.cs" />
-    <Compile Include="Patches\ScriptableObjectCreateInstancePatch.cs" />
-    <Compile Include="SR2\FoodGroupRegistry.cs" />
-    <Compile Include="SR2\PediaRegistry.cs" />
-    <Compile Include="SR2\Ranch\LandPlotRegistry.cs" />
-    <Compile Include="SR2\Ranch\LandPlotUpgradeRegistry.cs" />
-    <Compile Include="SR2\Ranch\ModdedPlotUpgrader.cs" />
-    <Compile Include="SR2\Slime\SlimeRegistry.cs" />
-    <Compile Include="SR2\TranslationPatcher.cs" />
-    <Compile Include="Utils\ColorUtils.cs" />
-    <Compile Include="Utils\EnumUtils.cs" />
-    <Compile Include="Utils\Extensions\GameObjectExtensions.cs" />
-    <Compile Include="Utils\Extensions\IdentifiableTypeListExtensions.cs" />
-    <Compile Include="Utils\Extensions\ListExtensions.cs" />
-    <Compile Include="Utils\Extensions\ObjectExtensions.cs" />
-    <Compile Include="EnumPatcher\EnumHolderAttribute.cs" />
-    <Compile Include="EnumPatcher\EnumHolderResolver.cs" />
-    <Compile Include="EnumPatcher\EnumInfoPatch.cs" />
-    <Compile Include="EnumPatcher\EnumPatcher.cs" />
-    <Compile Include="LoadingError.cs" />
-    <Compile Include="Patches\DisablePopupErrorPatch.cs" />
-    <Compile Include="Patches\GameContextModEventPatch.cs" />
-    <Compile Include="Patches\LoadGameBehaviorModelImagePatch.cs" />
-    <Compile Include="Patches\SaveSystem\GameModelInitializeLandPlotModel.cs" />
-    <Compile Include="Patches\SaveSystem\SavedGamePushPatch.cs" />
-    <Compile Include="Patches\SceneContextModEventPatch.cs" />
-    <Compile Include="Patches\SystemContextInitializePatch.cs" />
-    <Compile Include="Patches\AutoSaveDirectorRegistryPatch.cs" />
-    <Compile Include="Patches\CustomSlimeSubbehaviorPatches.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SR2\Slime\ModdedSlimeSubbehavior.cs" />
-    <Compile Include="SR2\SRLookup.cs" />
-    <Compile Include="SRMLMelonMod.cs" />
-    <Compile Include="Utils\Extensions\StringExtensions.cs" />
-    <Compile Include="Utils\GarbageCollectorUtils.cs" />
-    <Compile Include="Utils\ScriptableObjectUtils.cs" />
-    <Compile Include="Utils\TextureUtils.cs" />
+    <Compile Remove="Extensions\GameObjectExtensions.cs" />
+    <Compile Remove="Extensions\ObjectExtensions.cs" />
+    <Compile Remove="Patches\SaveSystem\SavedGamePush.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Patches\CustomSlimeSubbehaviorPatches.cs" />
+    <Content Include="Patches\CustomSlimeSubbehaviorPatches.cs" />
+  </ItemGroup>
 </Project>

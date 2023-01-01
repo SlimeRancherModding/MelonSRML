@@ -66,7 +66,7 @@
       <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\UnityEngine.Il2CppAssetBundleManager.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Il2CppImageConversionManager">
-      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\UnityEngine.Il2CppImageConversionManager.dll</HintPath>
+      <HintPath>E:\Steam\steamapps\common\Slime Rancher 2\MelonLoader\Managed\UnityEngine.Il2CppImageConversionManager.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\UnityEngine.UI.dll</HintPath>
@@ -77,7 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EntryPoint.cs" />
-    <Compile Include="EnumPatcher\IdentifiableCategorizationAttribute.cs" />
+    <Compile Include="EnumPatcher\IdentifiableCategorization.cs" />
     <Compile Include="EnumPatcher\IdentifiableTypeAttribute.cs" />
     <Compile Include="EnumPatcher\IdentifiableTypeResolver.cs" />
     <Compile Include="MSRModLoader.cs" />

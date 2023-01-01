@@ -1,22 +1,18 @@
-﻿public static class IdentifiableTypeListExtensions
-{
-    public static void IfDontContainsAdd(this IdentifiableTypeGroup @this, IdentifiableType identifiableType)
-    {
-        if (@this is null) return;
-        bool found = false;
-        @this.memberTypes.ForEach(new System.Action<IdentifiableType>(type =>
-        {
+﻿using Il2CppSystem.Collections.Generic;
 
-            var b = type.name == @identifiableType.name;
-            if (b)
-            {
-                found = true;
-            }
-        }));
-        if (!found)
-            @this.memberTypes.Add(identifiableType);
-        /*if (!@this.memberTypes.Contains(identifiableType))
-            @this.memberTypes.Add(identifiableType);
-            */
+public static class IdentifiableTypeListExtensions
+{
+    public static void AddIfNotContaining(this IdentifiableTypeGroup @this, IdentifiableType identifiableType)
+    {
+        if (@this is null) 
+            return;
+
+        foreach (IdentifiableType t in new List<IdentifiableType>(@this.GetAllMembers()))
+        {
+            if (identifiableType == t)
+                return;
+        }
+
+        @this.memberTypes.Add(identifiableType);
     }
 }

@@ -6,7 +6,7 @@ using MelonSRML.SR2;
 
 namespace MelonSRML.Patches.SaveSystem
 {
-    [HarmonyLib.HarmonyPatch(typeof(SavedGame), nameof(SavedGame.Push), typeof(GameModel))]
+    //[HarmonyLib.HarmonyPatch(typeof(SavedGame), nameof(SavedGame.Push), typeof(GameModel))]
     internal static class SavedGamePushPatch
     {
         public static void Prefix(SavedGame __instance)

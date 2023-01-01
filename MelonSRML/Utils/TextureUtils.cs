@@ -106,8 +106,6 @@ namespace MelonSRML.Utils
 			var read = stream.Read(data, 0, data.Length);
 			ImageConversion.LoadImage(texture2D, data);
 			return texture2D;
-			//
-
 		}
 	}
 }

@@ -1,8 +1,6 @@
 ﻿using System;
-using MelonLoader;
 using MelonSRML;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following

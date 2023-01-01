@@ -93,7 +93,7 @@ namespace MelonSRML.Utils
 			var texture2D = new Texture2D(1, 1);
 			texture2D.hideFlags |= HideFlags.HideAndDontSave;
 			texture2D.AddToAntiGC();
-			Il2CppImageConversionManager.LoadImage(texture2D, File.ReadAllBytes(path));
+			ImageConversion.LoadImage(texture2D, File.ReadAllBytes(path));
 			return texture2D;
 		}
 
@@ -104,7 +104,7 @@ namespace MelonSRML.Utils
 			texture2D.AddToAntiGC();
 			byte[] data = new byte[stream.Length];
 			var read = stream.Read(data, 0, data.Length);
-			Il2CppImageConversionManager.LoadImage(texture2D, data);
+			ImageConversion.LoadImage(texture2D, data);
 			return texture2D;
 			//
 

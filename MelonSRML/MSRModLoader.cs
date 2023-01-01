@@ -5,6 +5,7 @@ namespace MelonSRML
     public static class MSRModLoader
     {
         public static Step CurrentLoadingStep { internal set; get; } = Step.None;
+        public static SRMLMelonMod CurrentMod { internal set; get; } = null;
         [Flags]
         public enum Step
         {

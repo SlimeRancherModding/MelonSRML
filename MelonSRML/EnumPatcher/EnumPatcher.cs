@@ -4,128 +4,147 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using Il2CppInterop.Runtime;
+using MelonSRML.Utils;
 
 namespace MelonSRML.EnumPatcher
 {
-    /// <summary>
-    /// Allows adding values to any Enum
-    /// </summary>
     public static class EnumPatcher
     {
-        private static FieldInfo cache;
-        private static FieldInfo IL2CPPcache;
-
         private static Dictionary<Type, EnumPatch> patches = new Dictionary<Type, EnumPatch>();
         private static Dictionary<int, EnumPatch> IL2CPPpatches = new Dictionary<int, EnumPatch>();
-
-        static EnumPatcher()
-        {
-            cache = AccessTools.Field(AccessTools.TypeByName("System.RuntimeType"), "GenericCache");
-            IL2CPPcache = AccessTools.Field(typeof(Il2CppSystem.RuntimeType), "GenericCache");
-        }
-
-        internal static bool TryGetRawPatch(Type enumType, out EnumPatch patch) =>  patches.TryGetValue(enumType, out patch);
-        internal static bool TryGetRawPatchInIL2CPP(Il2CppSystem.Type enumType, out EnumPatch patch) => IL2CPPpatches.TryGetValue(enumType.GetHashCode(), out patch);
         
+        internal static bool TryAsNumber(this object value, Type type, out object result)
+        {
+            if (type.IsSubclassOf(typeof(IConvertible)))
+                throw new ArgumentException("The type must inherit the IConvertible interface", "type");
+            result = null;
+            if (type.IsInstanceOfType(value))
+            {
+                result = value;
+                return true;
+            }
+            if (value is IConvertible convertible)
+            {
+                if (type.IsEnum)
+                {
+                    result = Enum.ToObject(type, convertible);
+                    return true;
+                }
+                var format = NumberFormatInfo.CurrentInfo;
+                result = convertible.ToType(type, format);
+                return true;
+            }
+            return false;
+        }
         public static object GetFirstFreeValue(Type enumType)
         {
-            var allValues = Enum.GetValues(enumType);
-            for (var i = 0; i < allValues.Length - 1; i++)
-            {
-                if ((int)allValues.GetValue(i + 1) - (int)allValues.GetValue(i)>1)
-                {
-                    return Enum.ToObject(enumType, (int) allValues.GetValue(i) + 1);
-                }
-            }
-            return Enum.ToObject(enumType,(int)allValues.GetValue(allValues.Length - 1) + 1);
-        }
-        public static Il2CppSystem.Object GetFirstFreeValueInIL2CPP(Il2CppSystem.Type enumType)
-        {
-            var allValues = Il2CppSystem.Enum.GetValues(enumType);
-            for (var i = 0; i < allValues.Length - 1; i++)
-            {
-                if (Il2CppSystem.Convert.ToInt32(allValues.GetValue(i + 1)) - (int)Il2CppSystem.Convert.ToInt32(allValues.GetValue(i)) >1)
-                {
-                    return Il2CppSystem.Enum.ToObject(enumType, Il2CppSystem.Convert.ToInt32(allValues.GetValue(i)) + 1);
-                }
-            }
-
-            return Il2CppSystem.Enum.ToObject(enumType,
-                Il2CppSystem.Convert.ToInt32(allValues.GetValue(allValues.Length - 1)) + 1);
-
-            /*Msg(enumType.Name);
-            var allValues = Il2CppSystem.Enum.GetValues(enumType);
-            for (int i = 0; i < allValues.Length; i++)
-            {
-                var value = Il2CppSystem.Convert.ToInt32(allValues.GetValue(i +1));
-                var allValue = Il2CppSystem.Convert.ToInt32(i);
-                if (value - allValue > 1)
-                {
-                    
-                    return Il2CppSystem.Enum.ToObject(enumType, Convert.ToInt32(allValues.GetValue(i)) + 1);
-                }
-            }
-
-            return Il2CppSystem.Enum.ToObject(enumType, Convert.ToInt32(allValues.GetValue(allValues.Length - 1)) + 1);
-            */
-        }
-        public static void ClearEnumCache(Type enumType)
-        {
-            cache.SetValue(enumType, null);
-        }
-
-        public static void ClearEnumCacheInIL2CPP(Il2CppSystem.Type enumType)
-        {
-            //IL2CPPcache.SetValue(enumType, null);
-        }
-
-        public static void AddEnumValue(Type enumType, object value, string name)
-        {
+            if (enumType == null) throw new ArgumentNullException("enumType");
             if (!enumType.IsEnum) throw new Exception($"{enumType} is not a valid Enum!");
 
-            value = (ulong)Convert.ToUInt64(value, CultureInfo.InvariantCulture);
+            var vals = Enum.GetValues(enumType);
+            long l = 0;
+            for (ulong i = 0; i <= ulong.MaxValue; i++)
+            {
+                if (!i.TryAsNumber(enumType, out var v))
+                    break;
+                for (; l < vals.Length; l++)
+                    if (Convert.ToUInt64(vals.GetValue(l)).Equals(Convert.ToUInt32(v)))
+                        goto skip;
+                return v;
+                skip:;
+                
+            }
+            for (long i = -1; i >= long.MinValue; i--)
+            {
+                if (!i.TryAsNumber(enumType, out var v))
+                    break;
+                for (; l < vals.Length; l++)
+                    if (Convert.ToUInt64(vals.GetValue(l)).Equals(Convert.ToUInt32(v)))
+                        goto skip;
+                return v;
+                skip:;
+            }
+            throw new Exception("No unused values in enum " + enumType.FullName);
+        }
+        
+        
+        public static TEnum GetFirstFreeValue<TEnum>() => (TEnum)GetFirstFreeValue(typeof(TEnum));
+        public static void AddEnumValue(Type enumType, object value, string name)
+        {
+            if (enumType == null) throw new ArgumentNullException("enumType");
+            if (!enumType.IsEnum) throw new Exception($"{enumType} is not a valid Enum!");
+            if (AlreadyHasName(enumType, name) || EnumUtils.HasEnumValue(enumType, name)) throw new Exception($"The enum ({enumType.FullName}) already has a value with the name \"{name}\"");
+
+            value = (ulong)Convert.ToInt64(value, CultureInfo.InvariantCulture);
             if (!patches.TryGetValue(enumType, out var patch))
             {
                 patch = new EnumPatch();
                 patches.Add(enumType, patch);
             }
 
-            ClearEnumCache(enumType);
+            var from = Il2CppType.From(enumType, false);
+            if (from != null)
+            {
+                if (!IL2CPPpatches.TryGetValue(from.GetHashCode(), out var Il2CPPpatch))
+                {
+                    Il2CPPpatch = new EnumPatch();
+                    IL2CPPpatches.Add(from.GetHashCode(), Il2CPPpatch);
+                } 
+                Il2CPPpatch.AddValue((ulong)value, name);
+            }
+
 
             patch.AddValue((ulong)value, name);
         }
-        public static void AddEnumValueInIL2CPP(Il2CppSystem.Type enumType, Il2CppSystem.Object value, string name)
+        public static void AddEnumValue<T>(object value, string name) => AddEnumValue(typeof(T), value, name);
+        public static object AddEnumValue(Type enumType, string name)
         {
-            if (!enumType.IsEnum) throw new Exception($"{enumType} is not a valid Enum!");
-            var @ulong = Il2CppSystem.Convert.ToUInt64(value);
-            if (!IL2CPPpatches.TryGetValue(enumType.GetHashCode(), out var patch))
-            {
-                patch = new EnumPatch();
-                IL2CPPpatches.Add(enumType.GetHashCode(), patch);
-            }
+            var newVal = GetFirstFreeValue(enumType);
+            AddEnumValue(enumType, newVal, name);
+            return newVal;
+        }
+        internal static bool AlreadyHasName(Type enumType, string name)
+        {
+            if (TryGetRawPatch(enumType, out EnumPatch patch))
+                return patch.HasName(name);
+            return false;
+        }
+        internal static bool TryGetRawPatch(Type enumType, out EnumPatch patch)
+        {
+            return patches.TryGetValue(enumType, out patch);
+        }
 
-            ClearEnumCacheInIL2CPP(enumType);
-
-            patch.AddValue(@ulong, name);
+        internal static bool TryGetRawPatchInIL2CPP(Il2CppSystem.Type enumType, out EnumPatch patch)
+        {
+            return IL2CPPpatches.TryGetValue(enumType.GetHashCode(), out patch);
         }
         
-        public class EnumPatch
+
+        
+        public class EnumPatch 
         {
-            private Dictionary<ulong, string> values = new Dictionary<ulong, string>();
+            private Dictionary<ulong, List<string>> values = new Dictionary<ulong, List<string>>();
 
             public void AddValue(ulong enumValue, string name)
             {
-                if (values.ContainsKey(enumValue)) return;
-                values.Add(enumValue, name);
+                if (values.ContainsKey(enumValue))
+                    values[enumValue].Add(name);
+                else
+                    values.Add(enumValue, new List<string> { name });
+            }
+            
+            
+
+            public List<KeyValuePair<ulong, string>> GetPairs()
+            {
+                return (from pair in values from value in pair.Value select new KeyValuePair<ulong, string>(pair.Key, value)).ToList();
             }
 
-            public void GetArrays(out string[] names, out ulong[] values)
+            public bool HasName(string name)
             {
-                names = this.values.Values.ToArray();
-                values = this.values.Keys.ToArray();
+                return this.values.Values.SelectMany(l => l).Any(enumName => name.Equals(enumName));
             }
         }
-        
     }
 }
-    

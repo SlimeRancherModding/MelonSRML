@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine.Localization;
 
 namespace MelonSRML.Utils
 {

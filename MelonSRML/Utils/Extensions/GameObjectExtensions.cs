@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Il2CppInterop.Runtime;
 using MelonSRML;
 using MelonSRML.SR2;
-using UnhollowerRuntimeLib;
 
 public static class GameObjectExtensions
 {

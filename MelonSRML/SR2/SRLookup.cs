@@ -8,15 +8,22 @@ namespace MelonSRML.SR2
 {
     public static class SRLookup
     {
-        private static Dictionary<Type, List<Object>> collected = new Dictionary<Type, List<Object>>();
+        private static readonly Dictionary<Type, Object[]> cache = new Dictionary<Type, Object[]>();
 
         public static T Get<T>(string name) where T : Object
         {
             Type selected = Il2CppType.From(typeof(T));
-            if (!collected.ContainsKey(selected))
-                collected.Add(selected, Resources.FindObjectsOfTypeAll(selected).ToList());
+            if (!cache.ContainsKey(selected))
+                cache.Add(selected, Resources.FindObjectsOfTypeAll<T>());
 
-            return collected[selected].Find(x => x.name == name)?.Cast<T>();
+            T found = cache[selected].FirstOrDefault(x => x.name == name)?.Cast<T>();
+            if (found == null)
+            {
+                cache[selected] = Resources.FindObjectsOfTypeAll<T>();
+                found = cache[selected].FirstOrDefault(x => x.name == name)?.Cast<T>();
+            }
+
+            return found;
         }
         public static T GetCopy<T>(string name) where T : Object => 
             Object.Instantiate(Get<T>(name));

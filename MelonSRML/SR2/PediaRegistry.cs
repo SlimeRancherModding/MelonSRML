@@ -57,8 +57,6 @@ namespace MelonSRML.SR2
             identifiablePediaEntry.isUnlockedInitially = moddedPediaEntry.IsUnlockedInitially;
             identifiablePediaEntry.actionButtonLabel = defaultEntry.actionButtonLabel;
             identifiablePediaEntry.infoButtonLabel = defaultEntry.infoButtonLabel;
-            identifiablePediaEntry.moreActionKey = defaultEntry.moreActionKey;
-            identifiablePediaEntry.moreInfoKey = defaultEntry.moreInfoKey;
             identifiablePediaEntry._UnavailableIcon_k__BackingField = defaultEntry.UnavailableIcon;
             moddedPediaEntries.Add(identifiablePediaEntry);
             return identifiablePediaEntry;
@@ -79,8 +77,6 @@ namespace MelonSRML.SR2
             fixedPediaEntry.isUnlockedInitially = moddedPediaEntry.IsUnlockedInitially;
             fixedPediaEntry.actionButtonLabel = defaultEntry.actionButtonLabel;
             fixedPediaEntry.infoButtonLabel = defaultEntry.infoButtonLabel;
-            fixedPediaEntry.moreActionKey = defaultEntry.moreActionKey;
-            fixedPediaEntry.moreInfoKey = defaultEntry.moreInfoKey;
             fixedPediaEntry._UnavailableIcon_k__BackingField = defaultEntry.UnavailableIcon;
             moddedPediaEntries.Add(fixedPediaEntry);
             return fixedPediaEntry;

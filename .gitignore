@@ -1,5 +1,6 @@
 MelonSRML/bin/
 MelonSRML/obj/
+MelonSRML/Dependencies/*.dll
 .vs/
 .idea/
 *.user

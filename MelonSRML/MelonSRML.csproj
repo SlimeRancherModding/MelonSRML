@@ -35,8 +35,9 @@
     <Reference Include="0Harmony">
       <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\Assembly-CSharp.dll</HintPath>
+    <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\Steam\steamapps\common\Slime Rancher 2\MelonLoader\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Il2Cppmscorlib">
       <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher 2\MelonLoader\Managed\Il2Cppmscorlib.dll</HintPath>
@@ -81,6 +82,7 @@
     <Compile Include="EnumPatcher\IdentifiableTypeAttribute.cs" />
     <Compile Include="EnumPatcher\IdentifiableTypeResolver.cs" />
     <Compile Include="MSRModLoader.cs" />
+    <Compile Include="Patches\AnalyticsDirectorDisablePlayFabPatch.cs" />
     <Compile Include="Patches\AnalyticsUtilReportPerIdentifiableDataPatch.cs" />
     <Compile Include="Patches\LandPlotApplyUpgradesPatch.cs" />
     <Compile Include="Patches\LandPlotUIActivatorSetupUIPatch.cs" />

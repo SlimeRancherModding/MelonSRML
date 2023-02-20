@@ -1,100 +1,87 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
-using Enum = Il2CppSystem.Enum;
+using Il2CppSystem;
+using Array = System.Array;
+using Type = System.Type;
 
 namespace MelonSRML.EnumPatcher
 {
-    [HarmonyPatch(typeof(Il2CppSystem.Enum), nameof(Il2CppSystem.Enum.GetCachedValuesAndNames))]
-    public class EnumInfoInIl2CPP
+    [HarmonyPatch]
+    internal static class EnumInfoPatch
     {
-        public static void Postfix(Il2CppSystem.RuntimeType enumType, ref Il2CppSystem.Enum.ValuesAndNames __result)
+        static MethodBase TargetMethod()
         {
-            
-            ulong[] il2CppStructArray = __result.Values;
-            string[] il2CppStringArray = __result.Names;
-            FixEnum(enumType, ref il2CppStructArray, ref il2CppStringArray);
-            __result = new Enum.ValuesAndNames(il2CppStructArray, il2CppStringArray);
+            return typeof(System.Enum).GetMethod("GetEnumInfo", AccessTools.all);
         }
 
-        static void FixEnum(Il2CppSystem.Object type, ref ulong[] oldValues, ref string[] oldNames)
+        private static void FixEnum(object type, ref ulong[] oldValues, ref string[] oldNames)
         {
-            Il2CppSystem.Type enumType = type.Cast<Il2CppSystem.Type>();
-            if (enumType is null)
-                return;
-
-            if (EnumPatcher.TryGetRawPatchInIL2CPP(enumType, out var patch))
+            var enumType = type as Type;
+            if (EnumPatcher.TryGetRawPatch(enumType, out var patch))
             {
-                patch.GetArrays(out var toBePatchedNames, out var toBePatchedValues);
+                var pairs = patch.GetPairs();
+                List<ulong> newValues = new List<ulong>(oldValues);
+                List<string> newNames = new List<string>(oldNames);
 
-                Array.Resize(ref toBePatchedNames, toBePatchedNames.Length + oldNames.Length);
-                Array.Resize(ref toBePatchedValues, toBePatchedValues.Length + oldValues.Length);
-                Array.Copy(oldNames, 0, toBePatchedNames, toBePatchedNames.Length - oldNames.Length, oldNames.Length);
-                Array.Copy(oldValues, 0, toBePatchedValues, toBePatchedValues.Length - oldValues.Length, oldValues.Length);
-
-                oldValues = toBePatchedValues;
-                oldNames = toBePatchedNames;
+                foreach (var pair in pairs)
+                {
+                    newValues.Add(pair.Key);
+                    newNames.Add(pair.Value);
+                }
+                oldValues = newValues.ToArray();
+                oldNames = newNames.ToArray();
 
                 Array.Sort(oldValues, oldNames, Comparer<ulong>.Default);
             }
         }
+
+        [HarmonyPostfix]
+        public static void Postfix(object enumType, ref object __result)
+        {
+            var enumInfoType = __result.GetType();
+            var namesField = enumInfoType.GetField("Names",AccessTools.all);
+            var valuesField = enumInfoType.GetField("Values", AccessTools.all);
+            string[] names = (string[])namesField.GetValue(__result);
+            ulong[] values = (ulong[])valuesField.GetValue(__result);
+            FixEnum(enumType, ref values, ref names);
+            namesField.SetValue(__result, names);
+            valuesField.SetValue(__result, values);
+        }
     }
 
-    [HarmonyPatch]
-    public static class EnumInfoPatch
+    [HarmonyPatch(typeof(Il2CppSystem.Enum), nameof(Il2CppSystem.Enum.GetCachedValuesAndNames))]
+    internal static class EnumInfoIL2CPPPatch
     {
-        static MethodBase TargetMethod()
-        {
-            return AccessTools.Method(Type.GetType("System.Enum"), "GetCachedValuesAndNames");
 
-        }
-        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        public static void Postfix(ref Enum.ValuesAndNames __result, RuntimeType enumType)
         {
-            using (var enumerator = instructions.GetEnumerator())
+           
+            ulong[] il2CppStructArray = __result.Values;
+            string[] il2CppStringArray = __result.Names;
+            var tryCast = enumType.TryCast<Il2CppSystem.Type>();
+            if (tryCast is null) return;
+            
+            FixEnum(tryCast, ref il2CppStructArray, ref il2CppStringArray);
+        }
+
+        private static void FixEnum(Il2CppSystem.Type type, ref ulong[] oldValues, ref string[] oldNames)
+        {
+            if (EnumPatcher.TryGetRawPatchInIL2CPP(type, out var patch))
             {
-                while (enumerator.MoveNext())
+                var pairs = patch.GetPairs();
+                List<ulong> newValues = new List<ulong>(oldValues);
+                List<string> newNames = new List<string>(oldNames);
+
+                foreach (var pair in pairs)
                 {
-                    var v = enumerator.Current;
-                    if (v != null && v.operand is MethodInfo me && me.Name == "Sort")
-                    {
-                        yield return v;
-                        enumerator.MoveNext();
-                        v = enumerator.Current;
-                        var labels = v.labels;
-                        v.labels = new List<Label>();
-                        yield return new CodeInstruction(OpCodes.Ldarg_0) { labels = labels };
-                        yield return new CodeInstruction(OpCodes.Ldloca, 1);
-                        yield return new CodeInstruction(OpCodes.Ldloca, 2);
-                        yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(EnumInfoPatch), "FixEnum"));
-                        yield return v;
-                    }
-                    else
-                    {
-                        yield return v;
-                    }
+                    newValues.Add(pair.Key);
+                    newNames.Add(pair.Value);
                 }
-            }
-        }
-
-        static void FixEnum(object type, ref ulong[] oldValues, ref string[] oldNames)
-        {
-            if (type is not Type enumType)
-                return;
-
-            if (EnumPatcher.TryGetRawPatch(enumType, out var patch))
-            {
-
-                patch.GetArrays(out var toBePatchedNames, out var toBePatchedValues);
-
-                Array.Resize(ref toBePatchedNames, toBePatchedNames.Length + oldNames.Length);
-                Array.Resize(ref toBePatchedValues, toBePatchedValues.Length + oldValues.Length);
-                Array.Copy(oldNames, 0, toBePatchedNames, toBePatchedNames.Length - oldNames.Length, oldNames.Length);
-                Array.Copy(oldValues, 0, toBePatchedValues, toBePatchedValues.Length - oldValues.Length, oldValues.Length);
-
-                oldValues = toBePatchedValues;
-                oldNames = toBePatchedNames;
+                oldValues = newValues.ToArray();
+                oldNames = newNames.ToArray();
 
                 Array.Sort(oldValues, oldNames, Comparer<ulong>.Default);
             }

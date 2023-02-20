@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using UnhollowerRuntimeLib;
+using Il2CppInterop.Runtime;
 
 namespace MelonSRML.EnumPatcher
 {
@@ -9,18 +9,9 @@ namespace MelonSRML.EnumPatcher
     {
         public static void RegisterAllEnums(SRMLMelonMod mod = null)
         {
-
-            Assembly melonAssemblyAssembly = null;
-            if (mod is not null)
-            {
-                melonAssemblyAssembly = mod.MelonAssembly.Assembly;
-            }
-            else
-            {
-                melonAssemblyAssembly = Melon<EntryPoint>.Instance.MelonAssembly.Assembly;
-            }
+            Assembly melonAssembly = mod is not null ? mod.MelonAssembly.Assembly : Melon<EntryPoint>.Instance.MelonAssembly.Assembly;
             
-            foreach (Module module in melonAssemblyAssembly.Modules)
+            foreach (Module module in melonAssembly.Modules)
             {
                 foreach (Type type in module.GetTypes())
                 {
@@ -30,13 +21,8 @@ namespace MelonSRML.EnumPatcher
                         if (!field.FieldType.IsEnum) continue;
 
                         if ((int)field.GetValue(null) != 0) continue;
-                        Il2CppSystem.Type il2cppType = Il2CppType.From(field.FieldType, false);
-                        if (il2cppType is not null)
-                            EnumPatcher.AddEnumValueInIL2CPP(il2cppType, EnumPatcher.GetFirstFreeValueInIL2CPP(il2cppType), field.Name);
-
                         var newVal = EnumPatcher.GetFirstFreeValue(field.FieldType);
                         EnumPatcher.AddEnumValue(field.FieldType, newVal, field.Name);
-
                         field.SetValue(null, newVal);
                     }
                 }

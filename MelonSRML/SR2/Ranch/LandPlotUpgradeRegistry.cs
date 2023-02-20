@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MelonSRML.SR2.Slime;
 using UnityEngine.Localization;
 
 namespace MelonSRML.SR2.Ranch

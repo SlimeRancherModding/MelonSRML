@@ -1,7 +1,4 @@
-﻿using HarmonyLib;
-using MelonLoader;
-using System;
-using UnhollowerRuntimeLib;
+﻿using System;
 
 namespace MelonSRML.SR2.Slime
 {

@@ -6,10 +6,11 @@ using MelonSRML.SR2.Slime;
 using System.Collections.Generic;
 using System.Reflection;
 using HarmonyLib;
+using Il2CppInterop.Runtime;
+using Il2CppInterop.Runtime.Injection;
+using Il2CppInterop.Runtime.InteropTypes;
 using MelonSRML.EnumPatcher;
 using MelonSRML.SR2.Ranch;
-using UnhollowerBaseLib;
-using UnhollowerRuntimeLib;
 
 namespace MelonSRML
 {
@@ -27,9 +28,15 @@ namespace MelonSRML
 
         public override void OnInitializeMelon()
         {
+            /*
+             This currently doesn't work
             ClassInjector.RegisterTypeInIl2Cpp<ModdedSlimeSubbehavior>();
-            ClassInjector.RegisterTypeInIl2Cpp<ModdedPlotUpgrader>();
             CustomSlimeSubbehaviorPatches.moddedType = Il2CppType.Of<ModdedSlimeSubbehavior>();
+            */
+            
+            ClassInjector.RegisterTypeInIl2Cpp<ModdedPlotUpgrader>();
+            
+            
             HarmonyInstance.PatchAll();
             SystemContext.IsModded = true;
         }

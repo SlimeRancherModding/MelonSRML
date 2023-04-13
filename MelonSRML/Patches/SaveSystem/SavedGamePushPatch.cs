@@ -13,8 +13,8 @@ namespace MelonSRML.Patches.SaveSystem
         {
             foreach (var pediaEntry in PediaRegistry.moddedPediaEntries)
             {
-                if (__instance.pediaEntryLookup.ContainsKey(pediaEntry.name))
-                    __instance.pediaEntryLookup.Add(pediaEntry.name, pediaEntry);
+                if (!__instance.pediaEntryLookup.ContainsKey(pediaEntry.GetPersistenceId()))
+                    __instance.pediaEntryLookup.Add(pediaEntry.GetPersistenceId(), pediaEntry);
             }
             List<string> idsToRemove = __instance.gameState.pedia.unlockedIds.ToArray()
                 .Where(pediaUnlockedId => !__instance.pediaEntryLookup.ContainsKey(pediaUnlockedId)).ToList();

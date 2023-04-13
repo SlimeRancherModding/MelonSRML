@@ -40,7 +40,8 @@ namespace MelonSRML.SR2
             public LocalizedString Description;
             public LocalizedString Title;
         }
-        
+
+        public static void RegisterPediaEntry(PediaEntry toRegister) => moddedPediaEntries.Add(toRegister);
 
         public static IdentifiablePediaEntry CreatePediaEntryForIdentifiable(IdentifiableType identifiableType, ModdedPediaEntry moddedPediaEntry)
         {
@@ -58,7 +59,7 @@ namespace MelonSRML.SR2
             identifiablePediaEntry.actionButtonLabel = defaultEntry.actionButtonLabel;
             identifiablePediaEntry.infoButtonLabel = defaultEntry.infoButtonLabel;
             identifiablePediaEntry._UnavailableIcon_k__BackingField = defaultEntry.UnavailableIcon;
-            moddedPediaEntries.Add(identifiablePediaEntry);
+            RegisterPediaEntry(identifiablePediaEntry);
             return identifiablePediaEntry;
         }
         public static FixedPediaEntry CreatePediaEntryForNonIdentifiable(string textId, Sprite icon, ModdedPediaEntry moddedPediaEntry)
@@ -78,7 +79,7 @@ namespace MelonSRML.SR2
             fixedPediaEntry.actionButtonLabel = defaultEntry.actionButtonLabel;
             fixedPediaEntry.infoButtonLabel = defaultEntry.infoButtonLabel;
             fixedPediaEntry._UnavailableIcon_k__BackingField = defaultEntry.UnavailableIcon;
-            moddedPediaEntries.Add(fixedPediaEntry);
+            RegisterPediaEntry(fixedPediaEntry);
             return fixedPediaEntry;
         }
 

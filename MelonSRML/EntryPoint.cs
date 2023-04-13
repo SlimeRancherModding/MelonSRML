@@ -29,11 +29,11 @@ namespace MelonSRML
         public override void OnInitializeMelon()
         {
             /*
-             This currently doesn't work
+            This currently doesn't work
             ClassInjector.RegisterTypeInIl2Cpp<ModdedSlimeSubbehavior>();
             CustomSlimeSubbehaviorPatches.moddedType = Il2CppType.Of<ModdedSlimeSubbehavior>();
             */
-            
+
             ClassInjector.RegisterTypeInIl2Cpp<ModdedPlotUpgrader>();
             
             

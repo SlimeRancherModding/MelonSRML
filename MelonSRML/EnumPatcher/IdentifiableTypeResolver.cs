@@ -74,8 +74,9 @@ namespace MelonSRML.EnumPatcher
                         else
                         {
                             var invoke = EntryPoint.TryCast.MakeGenericMethod(field.FieldType).Invoke(identifiableType, Array.Empty<object>());
-                            
-                            field.SetValue(null, invoke);
+
+                            if (invoke != null)
+                                field.SetValue(null, invoke);
                         }
 
                         foreach (var att in field.GetCustomAttributes())
@@ -93,7 +94,6 @@ namespace MelonSRML.EnumPatcher
                         if (shouldRegister)
                             dir.identifiableTypes.AddIfNotContaining(identifiableType);
                     }
-                    
                 }
             }
         }

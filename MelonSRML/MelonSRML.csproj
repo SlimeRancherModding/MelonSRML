@@ -56,8 +56,4 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Patches\CustomSlimeSubbehaviorPatches.cs" />
-    <Content Include="Patches\CustomSlimeSubbehaviorPatches.cs" />
-  </ItemGroup>
 </Project>

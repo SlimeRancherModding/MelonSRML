@@ -8,14 +8,12 @@ namespace MelonSRML.Patches
     {
         public static void Prefix(GameContext __instance)
         {
-          
-
             if (EntryPoint.interruptMenuLoad)
                 return;
+
             MSRModLoader.CurrentLoadingStep = MSRModLoader.Step.OnGameContext;
             foreach (SRMLMelonMod mod in EntryPoint.registeredMods)
             {
-                
                 try
                 {
                     mod.OnGameContext(__instance);

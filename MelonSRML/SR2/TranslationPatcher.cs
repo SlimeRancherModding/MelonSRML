@@ -30,9 +30,9 @@ namespace MelonSRML.SR2
                 localizedStringTableEntry.Value = localized;
                 return new LocalizedString(stringTable.SharedData.TableCollectionName, localizedStringTableEntry.SharedEntry.Id);
             }
-            
-            patched.Add(key, localized);
-            
+
+            if (!patched.ContainsKey(key))
+                patched.Add(key, localized);
             
             StringTableEntry stringTableEntry = stringTable.AddEntry(key, localized);
             return new LocalizedString(stringTable.SharedData.TableCollectionName, stringTableEntry.SharedEntry.Id);

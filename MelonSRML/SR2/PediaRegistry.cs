@@ -1,11 +1,220 @@
 ﻿using System;
 using System.Collections.Generic;
+using Il2CppMonomiPark.SlimeRancher.UI.Pedia;
+using MelonSRML.Patches;
+using System.Linq;
 using MelonSRML.Utils;
 using UnityEngine.Localization;
 
 namespace MelonSRML.SR2
 {
     public static class PediaRegistry
+    {
+        internal static Dictionary<IdentifiableType, IdentifiablePediaEntry> addedPedias = new Dictionary<IdentifiableType, IdentifiablePediaEntry>();
+        internal static HashSet<FixedPediaEntry> addedFixedPedias = new HashSet<FixedPediaEntry>();
+
+        public static IdentifiablePediaEntry CreateIdentifiableEntry(IdentifiableType identifiableType, string pediaEntryName, PediaTemplate pediaTemplate,
+            LocalizedString pediaTitle, LocalizedString pediaIntro, LocalizedString actionButtonLabel, LocalizedString infoButtonLabel, bool unlockedInitially = false)
+        {
+            if (SRLookup.Get<IdentifiablePediaEntry>(pediaEntryName))
+                return null;
+
+            IdentifiablePediaEntry identifiablePediaEntry = ScriptableObject.CreateInstance<IdentifiablePediaEntry>();
+
+            identifiablePediaEntry.hideFlags |= HideFlags.HideAndDontSave;
+            identifiablePediaEntry.name = pediaEntryName;
+            identifiablePediaEntry.identifiableType = identifiableType;
+            identifiablePediaEntry.template = pediaTemplate;
+            identifiablePediaEntry.title = pediaTitle;
+            identifiablePediaEntry.description = pediaIntro;
+            identifiablePediaEntry.isUnlockedInitially = unlockedInitially;
+            identifiablePediaEntry.actionButtonLabel = actionButtonLabel;
+            identifiablePediaEntry.infoButtonLabel = infoButtonLabel;
+
+            return identifiablePediaEntry;
+        }
+
+        public static FixedPediaEntry CreateFixedEntry(string pediaEntryName, string pediaTextId, Sprite pediaIcon, PediaTemplate pediaTemplate,
+            LocalizedString pediaTitle, LocalizedString pediaIntro, LocalizedString actionButtonLabel, LocalizedString infoButtonLabel, bool unlockedInitially = false)
+        {
+            if (SRLookup.Get<FixedPediaEntry>(pediaEntryName))
+                return null;
+
+            FixedPediaEntry fixedPediaEntry = ScriptableObject.CreateInstance<FixedPediaEntry>();
+
+            fixedPediaEntry.hideFlags |= HideFlags.HideAndDontSave;
+            fixedPediaEntry.name = pediaEntryName;
+            fixedPediaEntry.template = pediaTemplate;
+            fixedPediaEntry.title = pediaTitle;
+            fixedPediaEntry.description = pediaIntro;
+            fixedPediaEntry.icon = pediaIcon;
+            fixedPediaEntry.textId = pediaTextId;
+            fixedPediaEntry.isUnlockedInitially = unlockedInitially;
+            fixedPediaEntry.actionButtonLabel = actionButtonLabel;
+            fixedPediaEntry.infoButtonLabel = infoButtonLabel;
+
+            return fixedPediaEntry;
+        }
+
+        public static void AddIdentifiablePage(string pediaEntryName, int pageNumber, string pediaText = "Placeholder Text. (Please set)", bool isHowToUse = false)
+        {
+            IdentifiablePediaEntry identifiablePediaEntry = SRLookup.Get<IdentifiablePediaEntry>(pediaEntryName);
+
+            string CreatePageKey(string prefix)
+            { return "m." + prefix + "." + identifiablePediaEntry.identifiableType.localizationSuffix + ".page." + pageNumber.ToString(); }
+
+            if (!isHowToUse)
+                TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("desc"), pediaText);
+            else if (isHowToUse)
+                TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("how_to_use"), pediaText);
+        }
+
+        public static void AddSlimepediaPage(string pediaEntryName, int pageNumber, string pediaText = "Placeholder Text. (Please set)", bool isRisks = false, bool isPlortonomics = false)
+        {
+            IdentifiablePediaEntry identifiablePediaEntry = SRLookup.Get<IdentifiablePediaEntry>(pediaEntryName);
+
+            string CreatePageKey(string prefix)
+            { return "m." + prefix + "." + identifiablePediaEntry.identifiableType.localizationSuffix + ".page." + pageNumber.ToString(); }
+
+            if (isRisks && !isPlortonomics)
+                TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("risks"), pediaText);
+            else if (!isRisks && isPlortonomics)
+                TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("plortonomics"), pediaText);
+            else if (!isRisks && !isPlortonomics)
+                TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("slimeology"), pediaText);
+        }
+
+        public static void AddTutorialPage(string pediaEntryName, int pageNumber, string pediaText = "Placeholder Text. (Please set)")
+        {
+            FixedPediaEntry fixedPediaEntry = SRLookup.Get<FixedPediaEntry>(pediaEntryName);
+
+            string CreatePageKey(string prefix)
+            { return "m." + prefix + "." + fixedPediaEntry.textId + ".page." + pageNumber.ToString(); }
+
+            TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("instructions"), pediaText);
+        }
+
+        public static PediaEntry AddIdentifiablePedia(IdentifiableType identifiableType, string pediaCategory, string pediaEntryName, string pediaIntro, string pediaDescription, string pediaHowToUse, bool useHighlightedTemplate = false, bool unlockedInitially = false)
+        {
+            if (SRLookup.Get<IdentifiablePediaEntry>(pediaEntryName))
+                return null;
+
+            PediaEntryCategory pediaEntryCategory = SRSingleton<SceneContext>.Instance.PediaDirector.entryCategories.items.ToArray().First(x => x.name == pediaCategory);
+            PediaEntryCategory basePediaEntryCategory = SRSingleton<SceneContext>.Instance.PediaDirector.entryCategories.items.ToArray().First(x => x.name == "Resources");
+            PediaEntry pediaEntry = basePediaEntryCategory.items.ToArray().First();
+            IdentifiablePediaEntry identifiablePediaEntry = ScriptableObject.CreateInstance<IdentifiablePediaEntry>();
+
+            string CreateKey(string prefix)
+            { return "m." + prefix + "." + identifiableType.localizationSuffix; }
+
+            string CreatePageKey(string prefix)
+            { return "m." + prefix + "." + identifiableType.localizationSuffix + ".page." + 1.ToString(); }
+
+            LocalizedString intro = TranslationPatcher.AddTranslation("Pedia", CreateKey("intro"), pediaIntro);
+            TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("desc"), pediaDescription);
+            TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("how_to_use"), pediaHowToUse);
+
+            identifiablePediaEntry.hideFlags |= HideFlags.HideAndDontSave;
+            identifiablePediaEntry.name = pediaEntryName;
+            identifiablePediaEntry.identifiableType = identifiableType;
+            if (!useHighlightedTemplate)
+                identifiablePediaEntry.template = pediaEntry.template;
+            else
+                identifiablePediaEntry.template = UnityEngine.Object.Instantiate(SRLookup.Get<PediaTemplate>("HighlightedResourcePediaTemplate"));
+            identifiablePediaEntry.title = identifiableType.localizedName;
+            identifiablePediaEntry.description = intro;
+            identifiablePediaEntry.isUnlockedInitially = unlockedInitially;
+            identifiablePediaEntry.actionButtonLabel = pediaEntry.actionButtonLabel;
+            identifiablePediaEntry.infoButtonLabel = pediaEntry.infoButtonLabel;
+
+            if (!pediaEntryCategory.items.Contains(identifiablePediaEntry))
+                pediaEntryCategory.items.Add(identifiablePediaEntry);
+            if (!addedPedias.ContainsKey(identifiableType))
+                addedPedias.Add(identifiableType, identifiablePediaEntry);
+
+            return identifiablePediaEntry;
+        }
+
+        public static PediaEntry AddSlimepedia(IdentifiableType identifiableType, string pediaEntryName, string pediaIntro, string pediaSlimeology, string pediaRisks, string pediaPlortonomics, bool unlockedInitially = false)
+        {
+            if (SRLookup.Get<IdentifiablePediaEntry>(pediaEntryName))
+                return null;
+
+            PediaEntryCategory pediaEntryCategory = SRSingleton<SceneContext>.Instance.PediaDirector.entryCategories.items.ToArray().First(x => x.name == "Slimes");
+            PediaEntryCategory basePediaEntryCategory = SRSingleton<SceneContext>.Instance.PediaDirector.entryCategories.items.ToArray().First(x => x.name == "Slimes");
+            PediaEntry pediaEntry = basePediaEntryCategory.items.ToArray().First();
+            IdentifiablePediaEntry identifiablePediaEntry = ScriptableObject.CreateInstance<IdentifiablePediaEntry>();
+
+            string CreateKey(string prefix)
+            { return "m." + prefix + "." + identifiableType.localizationSuffix; }
+
+            string CreatePageKey(string prefix)
+            { return "m." + prefix + "." + identifiableType.localizationSuffix + ".page." + 1.ToString(); }
+
+            LocalizedString intro = TranslationPatcher.AddTranslation("Pedia", CreateKey("intro"), pediaIntro);
+            TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("slimeology"), pediaSlimeology);
+            TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("risks"), pediaRisks);
+            TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("plortonomics"), pediaPlortonomics);
+
+            identifiablePediaEntry.hideFlags |= HideFlags.HideAndDontSave;
+            identifiablePediaEntry.name = pediaEntryName;
+            identifiablePediaEntry.identifiableType = identifiableType;
+            identifiablePediaEntry.template = pediaEntry.template;
+            identifiablePediaEntry.title = identifiableType.localizedName;
+            identifiablePediaEntry.description = intro;
+            identifiablePediaEntry.isUnlockedInitially = unlockedInitially;
+            identifiablePediaEntry.actionButtonLabel = pediaEntry.actionButtonLabel;
+            identifiablePediaEntry.infoButtonLabel = pediaEntry.infoButtonLabel;
+
+            if (!pediaEntryCategory.items.Contains(identifiablePediaEntry))
+                pediaEntryCategory.items.Add(identifiablePediaEntry);
+            if (!addedPedias.ContainsKey(identifiableType))
+                addedPedias.Add(identifiableType, identifiablePediaEntry);
+
+            return identifiablePediaEntry;
+        }
+
+        public static PediaEntry AddTutorialPedia(string pediaEntryName, Sprite pediaIcon, string pediaTitle, string pediaDescription, string pediaInstructions, bool unlockedInitially = true)
+        {
+            if (SRLookup.Get<FixedPediaEntry>(pediaEntryName))
+                return null;
+
+            PediaEntryCategory pediaEntryCategory = SRSingleton<SceneContext>.Instance.PediaDirector.entryCategories.items.ToArray().First(x => x.name == "Tutorials");
+            PediaEntryCategory basePediaEntryCategory = SRSingleton<SceneContext>.Instance.PediaDirector.entryCategories.items.ToArray().First(x => x.name == "Tutorials");
+            PediaEntry pediaEntry = basePediaEntryCategory.items.ToArray().First();
+            FixedPediaEntry tutorialPediaEntry = ScriptableObject.CreateInstance<FixedPediaEntry>();
+
+            string CreateKey(string prefix)
+            { return "m." + prefix + "." + pediaEntryName.ToLower().Replace(" ", "_"); }
+
+            string CreatePageKey(string prefix)
+            { return "m." + prefix + "." + pediaEntryName.ToLower().Replace(" ", "_") + ".page." + 1.ToString(); }
+
+            LocalizedString title = TranslationPatcher.AddTranslation("Pedia", "m." + pediaEntryName.ToLower().Replace(" ", "_"), pediaTitle);
+            LocalizedString desc = TranslationPatcher.AddTranslation("Pedia", CreateKey("desc"), pediaDescription);
+            TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("instructions"), pediaInstructions);
+
+            tutorialPediaEntry.hideFlags |= HideFlags.HideAndDontSave;
+            tutorialPediaEntry.name = pediaEntryName;
+            tutorialPediaEntry.template = pediaEntry.template;
+            tutorialPediaEntry.title = title;
+            tutorialPediaEntry.description = desc;
+            tutorialPediaEntry.icon = pediaIcon;
+            tutorialPediaEntry.textId = pediaEntryName.ToLower().Replace(" ", "_");
+            tutorialPediaEntry.isUnlockedInitially = unlockedInitially;
+            tutorialPediaEntry.actionButtonLabel = pediaEntry.actionButtonLabel;
+            tutorialPediaEntry.infoButtonLabel = pediaEntry.infoButtonLabel;
+
+            if (!pediaEntryCategory.items.Contains(tutorialPediaEntry))
+                pediaEntryCategory.items.Add(tutorialPediaEntry);
+            if (!addedFixedPedias.Contains(tutorialPediaEntry))
+                addedFixedPedias.Add(tutorialPediaEntry);
+
+            return tutorialPediaEntry;
+        }
+    }
+
+    /*public static class PediaRegistry
     {
         internal static List<PediaEntry> moddedPediaEntries = new List<PediaEntry>();
         private static PediaEntry defaultEntry;
@@ -142,6 +351,6 @@ namespace MelonSRML.SR2
             dietGroupHighlight.slimeDietOverrideEntries.Add(entry);
         }
         
-    } 
+    }*/
 }
 

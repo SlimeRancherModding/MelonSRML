@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 using MelonSRML.SR2;
 
@@ -9,14 +10,14 @@ namespace MelonSRML.Patches
     {
         public static void Prefix(PediaDirector __instance)
         {
-            foreach (var pediaEntry in PediaRegistry.moddedPediaEntries)
+            foreach (KeyValuePair<IdentifiableType, IdentifiablePediaEntry> keyValuePair in PediaRegistry.addedPedias)
             {
-                var tryCast = pediaEntry.TryCast<IdentifiablePediaEntry>();
-                if (tryCast)
-                    __instance.identDict.Add(tryCast.identifiableType, tryCast);
-                if (pediaEntry.IsUnlockedInitially)
+                if (__instance.identDict.ContainsKey(keyValuePair.Key))
+                    __instance.identDict.Add(keyValuePair.Key, keyValuePair.Value);
+
+                if (keyValuePair.Value.IsUnlockedInitially)
                 {
-                    __instance.initUnlocked = __instance.initUnlocked.AddItem(pediaEntry).ToArray();
+                    __instance.initUnlocked = __instance.initUnlocked.AddItem(keyValuePair.Value).ToArray();
                 }
             }
         }

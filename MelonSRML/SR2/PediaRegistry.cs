@@ -5,13 +5,26 @@ using MelonSRML.Patches;
 using System.Linq;
 using MelonSRML.Utils;
 using UnityEngine.Localization;
+using Il2Cpp;
+using Il2CppSystem.Security;
 
 namespace MelonSRML.SR2
 {
     public static class PediaRegistry
     {
-        internal static Dictionary<IdentifiableType, IdentifiablePediaEntry> addedPedias = new Dictionary<IdentifiableType, IdentifiablePediaEntry>();
-        internal static HashSet<FixedPediaEntry> addedFixedPedias = new HashSet<FixedPediaEntry>();
+        internal static HashSet<PediaEntry> addedPedias = new HashSet<PediaEntry>();
+
+        public static string CreateIdentifiableKey(string prefix, IdentifiableType identifiableType)
+        { return "m." + prefix + "." + identifiableType.localizationSuffix; }
+
+        public static string CreateIdentifiablePageKey(string prefix, int pageNumber, IdentifiableType identifiableType)
+        { return "m." + prefix + "." + identifiableType.localizationSuffix + ".page." + pageNumber.ToString(); }
+
+        public static string CreateFixedKey(string prefix, string textId)
+        { return "m." + prefix + "." + textId; }
+
+        public static string CreateFixedPageKey(string prefix, int pageNumber, string textId)
+        { return "m." + prefix + "." + textId + ".page." + pageNumber.ToString(); }
 
         public static IdentifiablePediaEntry CreateIdentifiableEntry(IdentifiableType identifiableType, string pediaEntryName, PediaTemplate pediaTemplate,
             LocalizedString pediaTitle, LocalizedString pediaIntro, LocalizedString actionButtonLabel, LocalizedString infoButtonLabel, bool unlockedInitially = false)
@@ -56,7 +69,7 @@ namespace MelonSRML.SR2
             return fixedPediaEntry;
         }
 
-        public static void AddIdentifiablePage(string pediaEntryName, int pageNumber, string pediaText = "Placeholder Text. (Please set)", bool isHowToUse = false)
+        public static void AddIdentifiablePage(string pediaEntryName, int pageNumber, string pediaText, bool isHowToUse = false)
         {
             IdentifiablePediaEntry identifiablePediaEntry = SRLookup.Get<IdentifiablePediaEntry>(pediaEntryName);
 
@@ -69,7 +82,7 @@ namespace MelonSRML.SR2
                 TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("how_to_use"), pediaText);
         }
 
-        public static void AddSlimepediaPage(string pediaEntryName, int pageNumber, string pediaText = "Placeholder Text. (Please set)", bool isRisks = false, bool isPlortonomics = false)
+        public static void AddSlimepediaPage(string pediaEntryName, int pageNumber, string pediaText, bool isRisks = false, bool isPlortonomics = false)
         {
             IdentifiablePediaEntry identifiablePediaEntry = SRLookup.Get<IdentifiablePediaEntry>(pediaEntryName);
 
@@ -84,7 +97,7 @@ namespace MelonSRML.SR2
                 TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("slimeology"), pediaText);
         }
 
-        public static void AddTutorialPage(string pediaEntryName, int pageNumber, string pediaText = "Placeholder Text. (Please set)")
+        public static void AddTutorialPage(string pediaEntryName, int pageNumber, string pediaText)
         {
             FixedPediaEntry fixedPediaEntry = SRLookup.Get<FixedPediaEntry>(pediaEntryName);
 
@@ -94,7 +107,7 @@ namespace MelonSRML.SR2
             TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("instructions"), pediaText);
         }
 
-        public static PediaEntry AddIdentifiablePedia(IdentifiableType identifiableType, string pediaCategory, string pediaEntryName, string pediaIntro, string pediaDescription, string pediaHowToUse, bool useHighlightedTemplate = false, bool unlockedInitially = false)
+        public static PediaEntry AddIdentifiablePedia(IdentifiableType identifiableType, string pediaCategory, string pediaEntryName, string pediaIntro, bool useHighlightedTemplate = false, bool unlockedInitially = false)
         {
             if (SRLookup.Get<IdentifiablePediaEntry>(pediaEntryName))
                 return null;
@@ -104,15 +117,7 @@ namespace MelonSRML.SR2
             PediaEntry pediaEntry = basePediaEntryCategory.items.ToArray().First();
             IdentifiablePediaEntry identifiablePediaEntry = ScriptableObject.CreateInstance<IdentifiablePediaEntry>();
 
-            string CreateKey(string prefix)
-            { return "m." + prefix + "." + identifiableType.localizationSuffix; }
-
-            string CreatePageKey(string prefix)
-            { return "m." + prefix + "." + identifiableType.localizationSuffix + ".page." + 1.ToString(); }
-
-            LocalizedString intro = TranslationPatcher.AddTranslation("Pedia", CreateKey("intro"), pediaIntro);
-            TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("desc"), pediaDescription);
-            TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("how_to_use"), pediaHowToUse);
+            LocalizedString intro = TranslationPatcher.AddTranslation("Pedia", CreateIdentifiableKey("intro", identifiableType), pediaIntro);
 
             identifiablePediaEntry.hideFlags |= HideFlags.HideAndDontSave;
             identifiablePediaEntry.name = pediaEntryName;
@@ -129,13 +134,13 @@ namespace MelonSRML.SR2
 
             if (!pediaEntryCategory.items.Contains(identifiablePediaEntry))
                 pediaEntryCategory.items.Add(identifiablePediaEntry);
-            if (!addedPedias.ContainsKey(identifiableType))
-                addedPedias.Add(identifiableType, identifiablePediaEntry);
+            if (!addedPedias.Contains(identifiablePediaEntry))
+                addedPedias.Add(identifiablePediaEntry);
 
             return identifiablePediaEntry;
         }
 
-        public static PediaEntry AddSlimepedia(IdentifiableType identifiableType, string pediaEntryName, string pediaIntro, string pediaSlimeology, string pediaRisks, string pediaPlortonomics, bool unlockedInitially = false)
+        public static PediaEntry AddSlimepedia(IdentifiableType identifiableType, string pediaEntryName, string pediaIntro, bool unlockedInitially = false)
         {
             if (SRLookup.Get<IdentifiablePediaEntry>(pediaEntryName))
                 return null;
@@ -145,16 +150,7 @@ namespace MelonSRML.SR2
             PediaEntry pediaEntry = basePediaEntryCategory.items.ToArray().First();
             IdentifiablePediaEntry identifiablePediaEntry = ScriptableObject.CreateInstance<IdentifiablePediaEntry>();
 
-            string CreateKey(string prefix)
-            { return "m." + prefix + "." + identifiableType.localizationSuffix; }
-
-            string CreatePageKey(string prefix)
-            { return "m." + prefix + "." + identifiableType.localizationSuffix + ".page." + 1.ToString(); }
-
-            LocalizedString intro = TranslationPatcher.AddTranslation("Pedia", CreateKey("intro"), pediaIntro);
-            TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("slimeology"), pediaSlimeology);
-            TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("risks"), pediaRisks);
-            TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("plortonomics"), pediaPlortonomics);
+            LocalizedString intro = TranslationPatcher.AddTranslation("Pedia", CreateIdentifiableKey("intro", identifiableType), pediaIntro);
 
             identifiablePediaEntry.hideFlags |= HideFlags.HideAndDontSave;
             identifiablePediaEntry.name = pediaEntryName;
@@ -168,13 +164,13 @@ namespace MelonSRML.SR2
 
             if (!pediaEntryCategory.items.Contains(identifiablePediaEntry))
                 pediaEntryCategory.items.Add(identifiablePediaEntry);
-            if (!addedPedias.ContainsKey(identifiableType))
-                addedPedias.Add(identifiableType, identifiablePediaEntry);
+            if (!addedPedias.Contains(identifiablePediaEntry))
+                addedPedias.Add(identifiablePediaEntry);
 
             return identifiablePediaEntry;
         }
 
-        public static PediaEntry AddTutorialPedia(string pediaEntryName, Sprite pediaIcon, string pediaTitle, string pediaDescription, string pediaInstructions, bool unlockedInitially = true)
+        public static PediaEntry AddTutorialPedia(string pediaEntryName, Sprite pediaIcon, string pediaTitle, string pediaDescription, bool unlockedInitially = true)
         {
             if (SRLookup.Get<FixedPediaEntry>(pediaEntryName))
                 return null;
@@ -184,15 +180,8 @@ namespace MelonSRML.SR2
             PediaEntry pediaEntry = basePediaEntryCategory.items.ToArray().First();
             FixedPediaEntry tutorialPediaEntry = ScriptableObject.CreateInstance<FixedPediaEntry>();
 
-            string CreateKey(string prefix)
-            { return "m." + prefix + "." + pediaEntryName.ToLower().Replace(" ", "_"); }
-
-            string CreatePageKey(string prefix)
-            { return "m." + prefix + "." + pediaEntryName.ToLower().Replace(" ", "_") + ".page." + 1.ToString(); }
-
             LocalizedString title = TranslationPatcher.AddTranslation("Pedia", "m." + pediaEntryName.ToLower().Replace(" ", "_"), pediaTitle);
-            LocalizedString desc = TranslationPatcher.AddTranslation("Pedia", CreateKey("desc"), pediaDescription);
-            TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("instructions"), pediaInstructions);
+            LocalizedString desc = TranslationPatcher.AddTranslation("Pedia", CreateFixedKey("desc", pediaEntryName.ToLower().Replace(" ", "_")), pediaDescription);
 
             tutorialPediaEntry.hideFlags |= HideFlags.HideAndDontSave;
             tutorialPediaEntry.name = pediaEntryName;
@@ -207,8 +196,8 @@ namespace MelonSRML.SR2
 
             if (!pediaEntryCategory.items.Contains(tutorialPediaEntry))
                 pediaEntryCategory.items.Add(tutorialPediaEntry);
-            if (!addedFixedPedias.Contains(tutorialPediaEntry))
-                addedFixedPedias.Add(tutorialPediaEntry);
+            if (!addedPedias.Contains(tutorialPediaEntry))
+                addedPedias.Add(tutorialPediaEntry);
 
             return tutorialPediaEntry;
         }

@@ -10,15 +10,14 @@ namespace MelonSRML.Patches
     {
         public static void Prefix(PediaDirector __instance)
         {
-            foreach (KeyValuePair<IdentifiableType, IdentifiablePediaEntry> keyValuePair in PediaRegistry.addedPedias)
+            foreach (var pediaEntry in PediaRegistry.addedPedias)
             {
-                if (__instance.identDict.ContainsKey(keyValuePair.Key))
-                    __instance.identDict.Add(keyValuePair.Key, keyValuePair.Value);
+                var identPediaEntry = pediaEntry.TryCast<IdentifiablePediaEntry>();
+                if (identPediaEntry && !__instance.identDict.ContainsKey(identPediaEntry.identifiableType))
+                    __instance.identDict.Add(identPediaEntry.identifiableType, pediaEntry);
 
-                if (keyValuePair.Value.IsUnlockedInitially)
-                {
-                    __instance.initUnlocked = __instance.initUnlocked.AddItem(keyValuePair.Value).ToArray();
-                }
+                if (pediaEntry.IsUnlockedInitially)
+                    __instance.initUnlocked = __instance.initUnlocked.AddItem(pediaEntry).ToArray();
             }
         }
     }

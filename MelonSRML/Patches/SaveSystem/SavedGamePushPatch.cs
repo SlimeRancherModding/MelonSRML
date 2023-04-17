@@ -11,13 +11,7 @@ namespace MelonSRML.Patches.SaveSystem
     {
         public static void Prefix(SavedGame __instance)
         {
-            foreach (var pediaEntry in PediaRegistry.addedPedias.Values)
-            {
-                if (!__instance.pediaEntryLookup.ContainsKey(pediaEntry.GetPersistenceId()))
-                    __instance.pediaEntryLookup.Add(pediaEntry.GetPersistenceId(), pediaEntry);
-            }
-
-            foreach (var pediaEntry in PediaRegistry.addedFixedPedias)
+            foreach (var pediaEntry in PediaRegistry.addedPedias)
             {
                 if (!__instance.pediaEntryLookup.ContainsKey(pediaEntry.GetPersistenceId()))
                     __instance.pediaEntryLookup.Add(pediaEntry.GetPersistenceId(), pediaEntry);
@@ -27,7 +21,6 @@ namespace MelonSRML.Patches.SaveSystem
                 .Where(pediaUnlockedId => !__instance.pediaEntryLookup.ContainsKey(pediaUnlockedId)).ToList();
 
             idsToRemove.ForEach(x => __instance.gameState.pedia.unlockedIds.Remove(x));
-           
         }
     }
 }

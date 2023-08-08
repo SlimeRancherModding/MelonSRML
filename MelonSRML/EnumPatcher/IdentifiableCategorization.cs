@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MelonSRML.Utils;
+using MelonSRML.Utils.Extensions;
 
 namespace MelonSRML.EnumPatcher
 {
@@ -11,14 +12,12 @@ namespace MelonSRML.EnumPatcher
 
         internal Rule rules;
         internal bool shouldRegister = true;
-        internal bool usingShouldRegister = false;
 
         public IdentifiableCategorization(Rule rules) => this.rules = rules;
         public IdentifiableCategorization(Rule rules, bool shouldRegister)
         {
             this.rules = rules;
-            this.shouldRegister = true;
-            usingShouldRegister = true;
+            this.shouldRegister = shouldRegister;
         }
 
         [Flags]

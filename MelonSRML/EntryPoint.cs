@@ -9,6 +9,8 @@ using HarmonyLib;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Injection;
 using Il2CppInterop.Runtime.InteropTypes;
+using Il2CppMonomiPark.SlimeRancher.Damage;
+using MelonSRML.Console;
 using MelonSRML.EnumPatcher;
 using MelonSRML.SR2.Ranch;
 
@@ -23,11 +25,23 @@ namespace MelonSRML
         internal static LoadingError error;
 
         internal static Transform prefabParent;
-        public static Assembly execAssembly = Assembly.GetExecutingAssembly();
+
+        internal static Damage KillObject;
         internal static MethodInfo TryCast = AccessTools.Method(typeof(Il2CppObjectBase), nameof(Il2CppObjectBase.TryCast));
 
         public override void OnInitializeMelon()
         {
+            
+            if (KillObject == null)
+            {
+                KillObject = new Damage
+                {
+                    damageSource = ScriptableObject.CreateInstance<DamageSourceDefinition>()
+                };
+                KillObject.damageSource.hideFlags |= HideFlags.HideAndDontSave;
+                KillObject.damageSource.logMessage = "RemoveCommand.Execute";
+            }
+            
             /*
             This currently doesn't work
             ClassInjector.RegisterTypeInIl2Cpp<ModdedSlimeSubbehavior>();
@@ -35,8 +49,9 @@ namespace MelonSRML
             */
 
             ClassInjector.RegisterTypeInIl2Cpp<ModdedPlotUpgrader>();
-            
-            
+            Console.Console.Init();
+
+
             HarmonyInstance.PatchAll();
             SystemContext.IsModded = true;
         }
@@ -50,6 +65,10 @@ namespace MelonSRML
                 registeredMods.Add(mod);
                 EnumHolderResolver.RegisterAllEnums(mod);
             });
+        }
+        public override void OnApplicationQuit()
+        {
+            KeyBindManager.Pull();
         }
     }
 }

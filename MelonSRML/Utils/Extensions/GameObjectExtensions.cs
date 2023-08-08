@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Il2CppInterop.Runtime;
-using MelonSRML;
 using MelonSRML.SR2;
+
+namespace MelonSRML.Utils.Extensions;
 
 public static class GameObjectExtensions
 {
@@ -13,9 +14,9 @@ public static class GameObjectExtensions
     }
 
     public static GameObject FindChildWithPartialName(
-      this GameObject obj,
-      string name,
-      bool noDive = false)
+        this GameObject obj,
+        string name,
+        bool noDive = false)
     {
         GameObject childWithPartialName = null;
         foreach (var @object in obj.transform)
@@ -69,9 +70,9 @@ public static class GameObjectExtensions
     }
 
     public static GameObject[] FindChildrenWithPartialName(
-      this GameObject obj,
-      string name,
-      bool noDive = false)
+        this GameObject obj,
+        string name,
+        bool noDive = false)
     {
         List<GameObject> gameObjectList = new List<GameObject>();
         foreach (var o in obj.transform)

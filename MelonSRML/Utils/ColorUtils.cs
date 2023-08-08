@@ -30,11 +30,26 @@ namespace MelonSRML.Utils
         {
             return ColorUtility.ToHtmlStringRGB(color);
         }
-
         
         public static string ToHexRGBA(Color color)
         {
             return ColorUtility.ToHtmlStringRGB(color);
         }
+        public static UnityEngine.Color ToUnityColor(this System.Drawing.Color drawingColor)
+        {
+            return new UnityEngine.Color(drawingColor.R / 255f, drawingColor.G / 255f, drawingColor.B / 255f, drawingColor.A / 255f);
+        }
+
+        public static System.Drawing.Color ToDrawingColor(this UnityEngine.Color unityColor)
+        {
+            return System.Drawing.Color.FromArgb(
+                (int) (unityColor.r * 255f),
+                (int) (unityColor.g * 255f),
+                (int) (unityColor.b * 255f),
+                (int) (unityColor.a * 255f)
+            );
+        }
+
+        public static string ToHexString(this System.Drawing.Color c) => $"{c.R:X2}{c.G:X2}{c.B:X2}";
     }
 }

@@ -1,0 +1,58 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "MelonStartScreen/1.0.0": {
+        "dependencies": {
+          "AssetRipper.VersionUtilities": "1.4.0",
+          "LavaGang.MelonLoader": "0.6.0",
+          "Samboy063.Tomlet": "5.1.2"
+        },
+        "runtime": {
+          "MelonStartScreen.dll": {}
+        }
+      },
+      "AssetRipper.VersionUtilities/1.4.0": {
+        "runtime": {
+          "lib/net6.0/AssetRipper.VersionUtilities.dll": {
+            "assemblyVersion": "1.4.0.0",
+            "fileVersion": "1.4.0.0"
+          }
+        }
+      },
+      "Samboy063.Tomlet/5.1.2": {
+        "runtime": {
+          "lib/net6.0/Tomlet.dll": {
+            "assemblyVersion": "5.1.2.0",
+            "fileVersion": "5.1.2.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "MelonStartScreen/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AssetRipper.VersionUtilities/1.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-SaswLF/xVadcVMgmZdec+8vUZSK7JxCv9xwp6mFW3wI36gV3ZmWgnJdHgmSWSXdj0ZxQWKMEfHrStjS45A8ihQ==",
+      "path": "assetripper.versionutilities/1.4.0",
+      "hashPath": "assetripper.versionutilities.1.4.0.nupkg.sha512"
+    },
+    "Samboy063.Tomlet/5.1.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-BQUfup0RZAnvYh1ok4ojihlv5SezjTI2krTxp04m5LDBwurRm5+4ONALeGlW2Syeexs1d5yftnZGz+qtVRcrMQ==",
+      "path": "samboy063.tomlet/5.1.2",
+      "hashPath": "samboy063.tomlet.5.1.2.nupkg.sha512"
+    }
+  }
+}

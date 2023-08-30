@@ -6,6 +6,7 @@ using Il2CppMonomiPark.SlimeRancher.UI;
 using Il2CppMonomiPark.SlimeRancher.UI.Plot;
 using MelonSRML.SR2.Ranch;
 using MelonSRML.Utils;
+using MelonSRML.Utils.Extensions;
 
 namespace MelonSRML.Patches
 {

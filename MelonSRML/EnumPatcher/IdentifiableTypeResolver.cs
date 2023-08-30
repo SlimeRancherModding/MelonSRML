@@ -5,6 +5,7 @@ using System.Reflection;
 using Il2CppInterop.Runtime;
 using Il2CppMonomiPark.SlimeRancher;
 using MelonSRML.SR2;
+using MelonSRML.Utils.Extensions;
 
 namespace MelonSRML.EnumPatcher
 {
@@ -82,7 +83,7 @@ namespace MelonSRML.EnumPatcher
                         foreach (var att in field.GetCustomAttributes())
                             if (att is IdentifiableCategorization attribute)
                             {
-                                if (attribute.usingShouldRegister)
+                                if (attribute.shouldRegister)
                                     shouldRegister = attribute.shouldRegister;
                                 if (IGNORE_REGISTER.Any(x => attribute.rules.HasFlag(x)))
                                     shouldRegister = false;

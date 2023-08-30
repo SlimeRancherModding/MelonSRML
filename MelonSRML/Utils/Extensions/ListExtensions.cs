@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
+namespace MelonSRML.Utils.Extensions;
+
 public static class ListExtensions
 { 
     public static void AddAndRemoveRangeWhere<T>(this ListAsset<T> list, IEnumerable<T> range, Func<T, T, bool> cond)
@@ -50,7 +53,4 @@ public static class ListExtensions
 
         return default;
     }
-    }
-    
-
-
+}

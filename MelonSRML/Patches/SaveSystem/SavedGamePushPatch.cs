@@ -11,16 +11,16 @@ namespace MelonSRML.Patches.SaveSystem
     {
         public static void Prefix(SavedGame __instance)
         {
-            foreach (var pediaEntry in PediaRegistry.moddedPediaEntries)
+            foreach (var pediaEntry in PediaRegistry.addedPedias)
             {
                 if (!__instance.pediaEntryLookup.ContainsKey(pediaEntry.GetPersistenceId()))
                     __instance.pediaEntryLookup.Add(pediaEntry.GetPersistenceId(), pediaEntry);
             }
+
             List<string> idsToRemove = __instance.gameState.pedia.unlockedIds.ToArray()
                 .Where(pediaUnlockedId => !__instance.pediaEntryLookup.ContainsKey(pediaUnlockedId)).ToList();
 
             idsToRemove.ForEach(x => __instance.gameState.pedia.unlockedIds.Remove(x));
-           
         }
     }
 }

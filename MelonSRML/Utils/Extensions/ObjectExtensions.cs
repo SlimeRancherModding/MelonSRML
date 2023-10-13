@@ -1,4 +1,6 @@
-﻿public static class ObjectExtensions
+﻿namespace MelonSRML.Utils.Extensions;
+
+public static class ObjectExtensions
 {
     public const string MIDDLE = " cannot be converted to type ";
 

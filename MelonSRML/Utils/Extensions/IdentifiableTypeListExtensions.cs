@@ -1,5 +1,7 @@
 ﻿using Il2CppSystem.Collections.Generic;
 
+namespace MelonSRML.Utils.Extensions;
+
 public static class IdentifiableTypeListExtensions
 {
     public static void AddIfNotContaining(this IdentifiableTypeGroup @this, IdentifiableType identifiableType)

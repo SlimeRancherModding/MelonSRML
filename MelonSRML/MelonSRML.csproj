@@ -27,6 +27,9 @@
     <Reference Include="MelonLoader">
       <HintPath>Dependencies\MelonLoader.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.InputSystem">
+      <HintPath>Dependencies\Unity.InputSystem.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Localization">
       <HintPath>Dependencies\Unity.Localization.dll</HintPath>
     </Reference>
@@ -39,6 +42,15 @@
     <Reference Include="UnityEngine.ImageConversionModule">
       <HintPath>Dependencies\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>Dependencies\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>Dependencies\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>Dependencies\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Dependencies\UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -50,10 +62,17 @@
     <Compile Remove="Extensions\GameObjectExtensions.cs" />
     <Compile Remove="Extensions\ObjectExtensions.cs" />
     <Compile Remove="Patches\SaveSystem\SavedGamePush.cs" />
+    <Compile Remove="Dependencies\**" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Dependencies\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Dependencies\**" />
   </ItemGroup>
 </Project>

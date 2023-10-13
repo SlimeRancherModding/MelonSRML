@@ -2,12 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using Il2CppInterop.Runtime;
+using Il2CppSystem.Linq;
 using Object = UnityEngine.Object;
 
 namespace MelonSRML.SR2
 {
     public static class SRLookup
     {
+        static SRLookup()
+        {
+            EntryPoint.prefabParent = new GameObject("RuntimePrefabs").transform;
+            EntryPoint.prefabParent.gameObject.SetActive(false);
+            Object.DontDestroyOnLoad(EntryPoint.prefabParent.gameObject);
+            EntryPoint.prefabParent.hideFlags = HideFlags.HideAndDontSave;
+        }
         private static readonly Dictionary<Type, Object[]> cache = new Dictionary<Type, Object[]>();
 
         public static T Get<T>(string name) where T : Object
@@ -46,13 +54,20 @@ namespace MelonSRML.SR2
             
             return obj;
         }
+        private static IdentifiableType[] privateIdentTypes;
 
-        static SRLookup()
+        public static IdentifiableType[] IdentifiableTypes
         {
-            EntryPoint.prefabParent = new GameObject("RuntimePrefabs").transform;
-            EntryPoint.prefabParent.gameObject.SetActive(false);
-            Object.DontDestroyOnLoad(EntryPoint.prefabParent.gameObject);
-            EntryPoint.prefabParent.hideFlags = HideFlags.HideAndDontSave;
+            get
+            {
+                
+                if (privateIdentTypes == null || privateIdentTypes.FirstOrDefault(x => x.Equals(null)))
+                    privateIdentTypes = SRSingleton<GameContext>.Instance.AutoSaveDirector.identifiableTypes.GetAllMembers().ToArray().Where(x => !string.IsNullOrEmpty(x.ReferenceId)).ToArray();
+
+                return privateIdentTypes;
+            }
         }
+
+     
     }
 }

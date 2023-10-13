@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using MelonSRML.Utils;
+
+namespace MelonSRML.Utils.Extensions;
 
 public static class StringExtensions
 {

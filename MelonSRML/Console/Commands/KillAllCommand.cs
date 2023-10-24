@@ -35,7 +35,6 @@ namespace MelonSRML.Console.Commands
                     {
 
                     }
-                    
             }
 
 
@@ -49,7 +48,7 @@ namespace MelonSRML.Console.Commands
 
                 if (radius == -1 || Vector3.Distance(actorPosition, SceneContext.Instance.PlayerState.model.position) < radius)
                 {
-                    if (toKill.Count == 0 || toKill.Contains(actorValue.ident))
+                    if (toKill.Count == 0 || toKill.FirstOrDefault(x => x == actorValue.ident))
                     {
                         if (actorValue.ident.ReferenceId.Equals("IdentifiableType.Player")) 
                             continue;

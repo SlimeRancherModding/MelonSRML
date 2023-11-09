@@ -73,38 +73,28 @@ namespace MelonSRML.SR2
         {
             IdentifiablePediaEntry identifiablePediaEntry = SRLookup.Get<IdentifiablePediaEntry>(pediaEntryName);
 
-            string CreatePageKey(string prefix)
-            { return "m." + prefix + "." + identifiablePediaEntry.identifiableType.localizationSuffix + ".page." + pageNumber.ToString(); }
-
             if (!isHowToUse)
-                TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("desc"), pediaText);
+                TranslationPatcher.AddTranslation("PediaPage", CreateIdentifiablePageKey("desc", pageNumber, identifiablePediaEntry.identifiableType), pediaText);
             else if (isHowToUse)
-                TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("how_to_use"), pediaText);
+                TranslationPatcher.AddTranslation("PediaPage", CreateIdentifiablePageKey("how_to_use", pageNumber, identifiablePediaEntry.identifiableType), pediaText);
         }
 
         public static void AddSlimepediaPage(string pediaEntryName, int pageNumber, string pediaText, bool isRisks = false, bool isPlortonomics = false)
         {
             IdentifiablePediaEntry identifiablePediaEntry = SRLookup.Get<IdentifiablePediaEntry>(pediaEntryName);
 
-            string CreatePageKey(string prefix)
-            { return "m." + prefix + "." + identifiablePediaEntry.identifiableType.localizationSuffix + ".page." + pageNumber.ToString(); }
-
             if (isRisks && !isPlortonomics)
-                TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("risks"), pediaText);
+                TranslationPatcher.AddTranslation("PediaPage", CreateIdentifiablePageKey("risks", pageNumber, identifiablePediaEntry.identifiableType), pediaText);
             else if (!isRisks && isPlortonomics)
-                TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("plortonomics"), pediaText);
+                TranslationPatcher.AddTranslation("PediaPage", CreateIdentifiablePageKey("plortonomics", pageNumber, identifiablePediaEntry.identifiableType), pediaText);
             else if (!isRisks && !isPlortonomics)
-                TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("slimeology"), pediaText);
+                TranslationPatcher.AddTranslation("PediaPage", CreateIdentifiablePageKey("slimeology", pageNumber, identifiablePediaEntry.identifiableType), pediaText);
         }
 
         public static void AddTutorialPage(string pediaEntryName, int pageNumber, string pediaText)
         {
             FixedPediaEntry fixedPediaEntry = SRLookup.Get<FixedPediaEntry>(pediaEntryName);
-
-            string CreatePageKey(string prefix)
-            { return "m." + prefix + "." + fixedPediaEntry.textId + ".page." + pageNumber.ToString(); }
-
-            TranslationPatcher.AddTranslation("PediaPage", CreatePageKey("instructions"), pediaText);
+            TranslationPatcher.AddTranslation("PediaPage", CreateFixedPageKey("instructions", pageNumber, fixedPediaEntry.textId), pediaText);
         }
 
         public static PediaEntry AddIdentifiablePedia(IdentifiableType identifiableType, string pediaCategory, string pediaEntryName, string pediaIntro, bool useHighlightedTemplate = false, bool unlockedInitially = false)
@@ -145,7 +135,6 @@ namespace MelonSRML.SR2
             if (SRLookup.Get<IdentifiablePediaEntry>(pediaEntryName))
                 return null;
 
-            PediaEntryCategory pediaEntryCategory = SRSingleton<SceneContext>.Instance.PediaDirector.entryCategories.items.ToArray().First(x => x.name == "Slimes");
             PediaEntryCategory basePediaEntryCategory = SRSingleton<SceneContext>.Instance.PediaDirector.entryCategories.items.ToArray().First(x => x.name == "Slimes");
             PediaEntry pediaEntry = basePediaEntryCategory.items.ToArray().First();
             IdentifiablePediaEntry identifiablePediaEntry = ScriptableObject.CreateInstance<IdentifiablePediaEntry>();
@@ -162,8 +151,8 @@ namespace MelonSRML.SR2
             identifiablePediaEntry.actionButtonLabel = pediaEntry.actionButtonLabel;
             identifiablePediaEntry.infoButtonLabel = pediaEntry.infoButtonLabel;
 
-            if (!pediaEntryCategory.items.Contains(identifiablePediaEntry))
-                pediaEntryCategory.items.Add(identifiablePediaEntry);
+            if (!basePediaEntryCategory.items.Contains(identifiablePediaEntry))
+                basePediaEntryCategory.items.Add(identifiablePediaEntry);
             if (!addedPedias.Contains(identifiablePediaEntry))
                 addedPedias.Add(identifiablePediaEntry);
 
@@ -175,7 +164,6 @@ namespace MelonSRML.SR2
             if (SRLookup.Get<FixedPediaEntry>(pediaEntryName))
                 return null;
 
-            PediaEntryCategory pediaEntryCategory = SRSingleton<SceneContext>.Instance.PediaDirector.entryCategories.items.ToArray().First(x => x.name == "Tutorials");
             PediaEntryCategory basePediaEntryCategory = SRSingleton<SceneContext>.Instance.PediaDirector.entryCategories.items.ToArray().First(x => x.name == "Tutorials");
             PediaEntry pediaEntry = basePediaEntryCategory.items.ToArray().First();
             FixedPediaEntry tutorialPediaEntry = ScriptableObject.CreateInstance<FixedPediaEntry>();
@@ -194,8 +182,8 @@ namespace MelonSRML.SR2
             tutorialPediaEntry.actionButtonLabel = pediaEntry.actionButtonLabel;
             tutorialPediaEntry.infoButtonLabel = pediaEntry.infoButtonLabel;
 
-            if (!pediaEntryCategory.items.Contains(tutorialPediaEntry))
-                pediaEntryCategory.items.Add(tutorialPediaEntry);
+            if (!basePediaEntryCategory.items.Contains(tutorialPediaEntry))
+                basePediaEntryCategory.items.Add(tutorialPediaEntry);
             if (!addedPedias.Contains(tutorialPediaEntry))
                 addedPedias.Add(tutorialPediaEntry);
 

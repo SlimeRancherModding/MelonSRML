@@ -106,7 +106,7 @@ namespace MelonSRML.SR2
             identifiablePediaEntry._pageEntries = pediaPagesEntries.ToArray();
         }
 
-        public static void AddSlimepediaSection(IdentifiablePediaEntry identifiablePediaEntry, string pediaEntryName, string pediaText, bool isRisks = false, bool isPlortonomics = false)
+        public static void AddSlimepediaSection(IdentifiablePediaEntry identifiablePediaEntry, string pediaText, bool isRisks = false, bool isPlortonomics = false)
         {
             List<PediaEntry.PediaPagesEntry> pediaPagesEntries = identifiablePediaEntry._pageEntries.ToList();
 

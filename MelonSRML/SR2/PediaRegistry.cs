@@ -17,6 +17,9 @@ namespace MelonSRML.SR2
     {
         internal static HashSet<PediaEntry> addedPedias = new HashSet<PediaEntry>();
 
+        public static string CreatePediaKey(string prefix, string localizationSuffix)
+        { return "m." + prefix + "." + localizationSuffix; }
+
         public static string CreateIdentifiableKey(string prefix, IdentifiableType identifiableType)
         { return "m." + prefix + "." + identifiableType.localizationSuffix; }
 
@@ -28,6 +31,15 @@ namespace MelonSRML.SR2
 
         /*public static string CreateFixedPageKey(string prefix, int pageNumber, string textId)
         { return "m." + prefix + "." + textId + ".page." + pageNumber.ToString(); }*/
+
+        public static PediaPage CreatePediaSection(string pediaSectionName, string sectionTitle, Sprite sectionIcon)
+        {
+            PediaPage pediaPage = ScriptableObject.CreateInstance<PediaPage>();
+            pediaPage.name = pediaSectionName;
+            pediaPage._title = TranslationPatcher.AddTranslation("UI", "l." + pediaSectionName.ToLower().Replace(" ", "_"), sectionTitle);
+            pediaPage._icon = sectionIcon;
+            return pediaPage;
+        }
 
         public static IdentifiablePediaEntry CreateIdentifiableEntry(IdentifiableType identifiableType, string pediaEntryName, PediaTemplate pediaTemplate,
             LocalizedString pediaTitle, LocalizedString pediaIntro, PediaEntry.PediaPagesEntry[] pediaPageEntries, bool unlockedInitially = false)
@@ -74,32 +86,69 @@ namespace MelonSRML.SR2
             return fixedPediaEntry;
         }
 
-        // Pages are now non-existent, lol
-        public static void AddIdentifiableSection(IdentifiablePediaEntry identifiablePediaEntry, string pediaText, bool isHowToUse = false)
+        public static void AddPediaSection(PediaEntry pediaEntry, PediaPage pediaSection, string pediaText)
         {
-            List<PediaEntry.PediaPagesEntry> pediaPagesEntries = identifiablePediaEntry._pageEntries.ToList();
+            if (pediaEntry.IsNull())
+                return;
+
+            string localizationSuffix;
+
+            if (pediaEntry.TryCast<FixedPediaEntry>())
+                localizationSuffix = pediaEntry.Cast<FixedPediaEntry>()._textId;
+            else if (pediaEntry.TryCast<IdentifiablePediaEntry>())
+                localizationSuffix = pediaEntry.Cast<IdentifiablePediaEntry>().IdentifiableType.localizationSuffix;
+            else
+                return;
+
+            List<PediaEntry.PediaPagesEntry> pediaPagesEntries = pediaEntry._pageEntries?.ToList();
 
             if (pediaPagesEntries.IsNull())
                 pediaPagesEntries = new List<PediaEntry.PediaPagesEntry>();
 
+            LocalizedString pediaTranslation = TranslationPatcher.AddTranslation("PediaPage", CreatePediaKey(pediaSection.name.ToLower().Replace(" ", "_"), localizationSuffix), pediaText);
+            pediaPagesEntries.Add(new PediaEntry.PediaPagesEntry()
+            {
+                PediaPage = pediaSection,
+                Text = pediaTranslation,
+                TextGamepad = pediaTranslation,
+                TextPS4 = pediaTranslation
+            });
+
+            pediaEntry._pageEntries = pediaPagesEntries.ToArray();
+        }
+
+        // Pages are now non-existent, lol
+        public static void AddIdentifiableSection(IdentifiablePediaEntry identifiablePediaEntry, string pediaText, bool isHowToUse = false)
+        {
+            if (identifiablePediaEntry.IsNull())
+                return;
+
+            List<PediaEntry.PediaPagesEntry> pediaPagesEntries = identifiablePediaEntry._pageEntries?.ToList();
+
+            if (pediaPagesEntries.IsNull())
+                pediaPagesEntries = new List<PediaEntry.PediaPagesEntry>();
+
+            LocalizedString pediaTranslation;
             if (!isHowToUse)
             {
+                pediaTranslation = TranslationPatcher.AddTranslation("PediaPage", CreateIdentifiableKey("desc", identifiablePediaEntry.IdentifiableType), pediaText);
                 pediaPagesEntries.Add(new PediaEntry.PediaPagesEntry()
                 {
                     PediaPage = SRLookup.Get<PediaPage>("Description"),
-                    Text = TranslationPatcher.AddTranslation("PediaPage", CreateIdentifiableKey("desc", identifiablePediaEntry.IdentifiableType), pediaText),
-                    TextGamepad = new LocalizedString(),
-                    TextPS4 = new LocalizedString()
+                    Text = pediaTranslation,
+                    TextGamepad = pediaTranslation,
+                    TextPS4 = pediaTranslation
                 });
             }
             else
             {
+                pediaTranslation = TranslationPatcher.AddTranslation("PediaPage", CreateIdentifiableKey("how_to_use", identifiablePediaEntry.IdentifiableType), pediaText);
                 pediaPagesEntries.Add(new PediaEntry.PediaPagesEntry()
                 {
                     PediaPage = SRLookup.Get<PediaPage>("OnTheRanchResource"),
-                    Text = TranslationPatcher.AddTranslation("PediaPage", CreateIdentifiableKey("how_to_use", identifiablePediaEntry.IdentifiableType), pediaText),
-                    TextGamepad = new LocalizedString(),
-                    TextPS4 = new LocalizedString()
+                    Text = pediaTranslation,
+                    TextGamepad = pediaTranslation,
+                    TextPS4 = pediaTranslation
                 });
             }
 
@@ -108,39 +157,46 @@ namespace MelonSRML.SR2
 
         public static void AddSlimepediaSection(IdentifiablePediaEntry identifiablePediaEntry, string pediaText, bool isRisks = false, bool isPlortonomics = false)
         {
-            List<PediaEntry.PediaPagesEntry> pediaPagesEntries = identifiablePediaEntry._pageEntries.ToList();
+            if (identifiablePediaEntry.IsNull())
+                return;
+
+            List<PediaEntry.PediaPagesEntry> pediaPagesEntries = identifiablePediaEntry._pageEntries?.ToList();
 
             if (pediaPagesEntries.IsNull())
                 pediaPagesEntries = new List<PediaEntry.PediaPagesEntry>();
 
+            LocalizedString pediaTranslation;
             if (isRisks && !isPlortonomics)
             {
+                pediaTranslation = TranslationPatcher.AddTranslation("PediaPage", CreateIdentifiableKey("risks", identifiablePediaEntry.IdentifiableType), pediaText);
                 pediaPagesEntries.Add(new PediaEntry.PediaPagesEntry()
                 {
                     PediaPage = SRLookup.Get<PediaPage>("Rancher Risks"),
-                    Text = TranslationPatcher.AddTranslation("PediaPage", CreateIdentifiableKey("risks", identifiablePediaEntry.IdentifiableType), pediaText),
-                    TextGamepad = new LocalizedString(),
-                    TextPS4 = new LocalizedString()
+                    Text = pediaTranslation,
+                    TextGamepad = pediaTranslation,
+                    TextPS4 = pediaTranslation
                 });
             }
             else if (!isRisks && isPlortonomics)
             {
+                pediaTranslation = TranslationPatcher.AddTranslation("PediaPage", CreateIdentifiableKey("plortonomics", identifiablePediaEntry.IdentifiableType), pediaText);
                 pediaPagesEntries.Add(new PediaEntry.PediaPagesEntry()
                 {
                     PediaPage = SRLookup.Get<PediaPage>("Plortonomics"),
-                    Text = TranslationPatcher.AddTranslation("PediaPage", CreateIdentifiableKey("plortonomics", identifiablePediaEntry.IdentifiableType), pediaText),
-                    TextGamepad = new LocalizedString(),
-                    TextPS4 = new LocalizedString()
+                    Text = pediaTranslation,
+                    TextGamepad = pediaTranslation,
+                    TextPS4 = pediaTranslation
                 });
             }
             else
             {
+                pediaTranslation = TranslationPatcher.AddTranslation("PediaPage", CreateIdentifiableKey("slimeology", identifiablePediaEntry.IdentifiableType), pediaText);
                 pediaPagesEntries.Add(new PediaEntry.PediaPagesEntry()
                 {
                     PediaPage = SRLookup.Get<PediaPage>("Slimeology"),
-                    Text = TranslationPatcher.AddTranslation("PediaPage", CreateIdentifiableKey("slimeology", identifiablePediaEntry.IdentifiableType), pediaText),
-                    TextGamepad = new LocalizedString(),
-                    TextPS4 = new LocalizedString()
+                    Text = pediaTranslation,
+                    TextGamepad = pediaTranslation,
+                    TextPS4 = pediaTranslation
                 });
             }
 
@@ -149,17 +205,21 @@ namespace MelonSRML.SR2
 
         public static void AddTutorialSection(FixedPediaEntry fixedPediaEntry, string pediaText)
         {
-            List<PediaEntry.PediaPagesEntry> pediaPagesEntries = fixedPediaEntry._pageEntries.ToList();
+            if (fixedPediaEntry.IsNull())
+                return;
+
+            List<PediaEntry.PediaPagesEntry> pediaPagesEntries = fixedPediaEntry._pageEntries?.ToList();
 
             if (pediaPagesEntries.IsNull())
                 pediaPagesEntries = new List<PediaEntry.PediaPagesEntry>();
 
+            LocalizedString pediaTranslation = TranslationPatcher.AddTranslation("PediaPage", CreateFixedKey("instructions", fixedPediaEntry._textId), pediaText);
             pediaPagesEntries.Add(new PediaEntry.PediaPagesEntry()
             {
                 PediaPage = SRLookup.Get<PediaPage>("Instructions"),
-                Text = TranslationPatcher.AddTranslation("PediaPage", CreateFixedKey("instructions", fixedPediaEntry._textId), pediaText),
-                TextGamepad = new LocalizedString(),
-                TextPS4 = new LocalizedString()
+                Text = pediaTranslation,
+                TextGamepad = pediaTranslation,
+                TextPS4 = pediaTranslation
             });
 
             fixedPediaEntry._pageEntries = pediaPagesEntries.ToArray();

@@ -8,46 +8,6 @@ using System.Threading.Tasks;
 
 namespace MelonSRML.Console.Commands
 {
-    internal class GravityCommand : ConsoleCommand
-    {
-        public SRCharacterController Player;
-
-        public static T Get<T>(string name) where T : UnityEngine.Object
-        {
-            return Resources.FindObjectsOfTypeAll<T>().FirstOrDefault(x => x.name == name);
-        }
-
-        public override string ID => "gravity";
-
-        public override string Usage => "gravity <active>";
-
-        public override string Description => "Toggles gravity";
-
-        public override bool Execute(string[] args)
-        {
-            if (args.Length < 1 || args.Length >= 2)
-            {
-                MelonLogger.Error("Incorrect number of arguments!");
-                return false;
-            }
-
-            if (Get<SRCharacterController>("PlayerControllerKCC") != null)
-            {
-                Player = Get<SRCharacterController>("PlayerControllerKCC");
-                try
-                {
-                    Player.BypassGravity = !bool.Parse(args[0].ToLower());
-                    return true;
-                }
-                catch
-                {
-                    MelonLogger.Error("Invalid arguments? Try using true/false.");
-                    return false;
-                }
-            }
-            else return false;
-        }
-    }
     internal class NoclipCommand : ConsoleCommand
     {
         public static T Get<T>(string name) where T : UnityEngine.Object

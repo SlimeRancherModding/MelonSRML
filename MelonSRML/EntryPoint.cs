@@ -36,10 +36,10 @@ namespace MelonSRML
             {
                 KillObject = new Damage
                 {
-                    damageSource = ScriptableObject.CreateInstance<DamageSourceDefinition>()
+                    DamageSource = ScriptableObject.CreateInstance<DamageSourceDefinition>()
                 };
-                KillObject.damageSource.hideFlags |= HideFlags.HideAndDontSave;
-                KillObject.damageSource.logMessage = "RemoveCommand.Execute";
+                KillObject.DamageSource.hideFlags |= HideFlags.HideAndDontSave;
+                KillObject.DamageSource._logMessage = "RemoveCommand.Execute";
             }
             
             /*
@@ -66,6 +66,7 @@ namespace MelonSRML
                 EnumHolderResolver.RegisterAllEnums(mod);
             });
         }
+
         public override void OnApplicationQuit()
         {
             KeyBindManager.Pull();

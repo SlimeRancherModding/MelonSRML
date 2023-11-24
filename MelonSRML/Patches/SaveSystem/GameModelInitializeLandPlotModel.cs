@@ -24,7 +24,7 @@ namespace MelonSRML.Patches.SaveSystem
                 return;
             feederNextTime = 0;
             feederPendingCount = 0;
-            feederCycleSpeed = SlimeFeeder.FeedSpeed.Normal;
+            feederCycleSpeed = SlimeFeeder.FeedSpeed.NORMAL;
             collectorNextTime = 0;
             resourceGrowerDefinition = null;
             upgrades.Clear();

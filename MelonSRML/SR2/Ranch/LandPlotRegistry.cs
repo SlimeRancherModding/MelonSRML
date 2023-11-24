@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Il2CppMonomiPark.SlimeRancher.Pedia;
 using MelonSRML.Utils.Extensions;
 using UnityEngine.Localization;
 
@@ -26,8 +27,8 @@ namespace MelonSRML.SR2.Ranch
 
         public static void RegisterPurchasableLandPlot(LandPlotShopEntry entry, GameObject prefab)
         {
-            SRSingleton<GameContext>.Instance.LookupDirector.plotPrefabs.AddAndRemoveRangeWhere(new[] { prefab }, (o, gameObject) => o.GetComponentInChildren<LandPlot>().typeId == gameObject.GetComponentInChildren<LandPlot>().typeId);
-            var typeId = prefab.GetComponentInChildren<LandPlot>().typeId;
+            SRSingleton<GameContext>.Instance.LookupDirector.plotPrefabs.AddAndRemoveRangeWhere(new[] { prefab }, (o, gameObject) => o.GetComponentInChildren<LandPlot>().TypeId == gameObject.GetComponentInChildren<LandPlot>().TypeId);
+            var typeId = prefab.GetComponentInChildren<LandPlot>().TypeId;
             if (SRSingleton<GameContext>.Instance.LookupDirector.plotPrefabDict.ContainsKey(typeId))
             {
                 SRSingleton<GameContext>.Instance.LookupDirector.plotPrefabDict.Remove(typeId);

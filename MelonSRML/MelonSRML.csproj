@@ -4,6 +4,7 @@
     <OutputType>Library</OutputType>
     <LangVersion>preview</LangVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	<DebugType>embedded</DebugType>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">

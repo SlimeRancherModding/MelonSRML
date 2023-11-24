@@ -11,7 +11,7 @@ namespace MelonSRML.Patches
         public static bool Prefix(LoadGameBehaviorModel __instance, ref Sprite __result)
         {
             iconDot ??= SRLookup.Get<Sprite>("iconDot");
-            if (__instance.GameDataSummary.iconId is not null)
+            if (__instance.GameDataSummary.IconId is not null)
                 return true;
 
             __result = iconDot;

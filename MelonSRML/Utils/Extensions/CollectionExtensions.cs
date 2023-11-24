@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MelonSRML.Utils.Extensions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,12 @@ using Random = UnityEngine.Random;
 public static class CollectionExtensions
 {
     public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue customDefault = default) => dictionary.ContainsKey(key) ? dictionary[key] : customDefault;
+
+    public static void AddIfDoesNotContain<T>(this Il2CppSystem.Collections.Generic.List<T> list, T item)
+    {
+        if (!list.Contains(item))
+            list.Add(item);
+    }
 
     public static void AddIfDoesNotContain<T>(this ICollection<T> list, T item)
     {

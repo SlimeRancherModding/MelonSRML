@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Il2CppMonomiPark.SlimeRancher.Pedia;
+using System;
 using System.Collections.Generic;
 using UnityEngine.Localization;
 

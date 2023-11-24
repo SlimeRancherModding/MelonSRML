@@ -4,9 +4,10 @@ using MelonSRML.Console;
 
 namespace MelonSRML.Patches
 {
-    [HarmonyPatch(typeof(OptionsModel), "Push")]
+    // currently not working
+    /*[HarmonyPatch(typeof(OptionsModel), "Push")]
     internal static class OptionsModelPushPatch
     {
         public static void Prefix() => KeyBindManager.Push();
-    }
+    }*/
 }

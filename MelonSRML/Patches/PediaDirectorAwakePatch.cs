@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
+using Il2CppMonomiPark.SlimeRancher.Pedia;
 using MelonSRML.SR2;
 
 namespace MelonSRML.Patches
@@ -10,14 +10,15 @@ namespace MelonSRML.Patches
     {
         public static void Prefix(PediaDirector __instance)
         {
-            foreach (var pediaEntry in PediaRegistry.addedPedias)
+            foreach (var pediaEntry in PediaRegistry.moddedPediaEntries)
             {
-                var identPediaEntry = pediaEntry.TryCast<IdentifiablePediaEntry>();
-                if (identPediaEntry && !__instance.identDict.ContainsKey(identPediaEntry.identifiableType))
-                    __instance.identDict.Add(identPediaEntry.identifiableType, pediaEntry);
-
-                if (pediaEntry.IsUnlockedInitially)
-                    __instance.initUnlocked = __instance.initUnlocked.AddItem(pediaEntry).ToArray();
+                var tryCast = pediaEntry.TryCast<IdentifiablePediaEntry>();
+                if (tryCast)
+                    __instance._identDict.Add(tryCast._identifiableType, tryCast);
+                if (pediaEntry._isUnlockedInitially)
+                {
+                    __instance._initUnlocked = __instance._initUnlocked.AddItem(pediaEntry).ToArray();
+                }
             }
         }
     }

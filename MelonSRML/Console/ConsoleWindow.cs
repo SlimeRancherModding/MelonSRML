@@ -43,7 +43,7 @@ namespace MelonSRML.Console
         private static GUIStyle textArea;
         private static GUIStyle window;
         internal static Font consoleFont;
-        
+
         // DESIGN VARIABLES
         private static Vector2 oldRes = new Vector2(Screen.width, Screen.height);
         private static Vector2 windowSize = new Vector2(Screen.width + 20, Screen.height / 2);
@@ -101,8 +101,8 @@ namespace MelonSRML.Console
         private static string oldCmdText = null;
 
         public static CursorLockHandler cursorlockHandler;
-        
-        
+
+
 
         /// <summary>
         /// Attachs the window to a scene

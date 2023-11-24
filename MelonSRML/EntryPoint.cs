@@ -13,11 +13,14 @@ using Il2CppMonomiPark.SlimeRancher.Damage;
 using MelonSRML.Console;
 using MelonSRML.EnumPatcher;
 using MelonSRML.SR2.Ranch;
+using System.Linq;
+using MelonSRML.Console.Commands;
 
 namespace MelonSRML
 {
     internal class EntryPoint : MelonPlugin
     {
+
         internal static List<SRMLMelonMod> registeredMods = new List<SRMLMelonMod>();
 
         internal static bool interruptMenuLoad = false;
@@ -29,6 +32,7 @@ namespace MelonSRML
         internal static Damage KillObject;
         internal static MethodInfo TryCast = AccessTools.Method(typeof(Il2CppObjectBase), nameof(Il2CppObjectBase.TryCast));
 
+
         public override void OnInitializeMelon()
         {
             
@@ -36,10 +40,10 @@ namespace MelonSRML
             {
                 KillObject = new Damage
                 {
-                    damageSource = ScriptableObject.CreateInstance<DamageSourceDefinition>()
+                    DamageSource = ScriptableObject.CreateInstance<DamageSourceDefinition>()
                 };
-                KillObject.damageSource.hideFlags |= HideFlags.HideAndDontSave;
-                KillObject.damageSource.logMessage = "RemoveCommand.Execute";
+                KillObject.DamageSource.hideFlags |= HideFlags.HideAndDontSave;
+                KillObject.DamageSource._logMessage = "RemoveCommand.Execute";
             }
             
             /*

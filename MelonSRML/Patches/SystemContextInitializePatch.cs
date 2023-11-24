@@ -12,20 +12,20 @@ namespace MelonSRML.Patches
     {
         public static void Prefix(SystemContext __instance)
         {
-            __instance.SceneLoader.onSceneGroupLoadedDelegate += new Action<SceneGroup, Il2CppSystem.Action<SceneLoadErrorData>>((x,y) =>
+            __instance.SceneLoader.OnSceneGroupLoadedDelegate += new Action<SceneGroup, Il2CppSystem.Action<SceneLoadErrorData>>((x,y) =>
             {
-                if ((x.name == "MainMenuFromBoot" && EntryPoint.interruptMenuLoad) || (x.isGameplay && EntryPoint.interruptGameLoad))
+                if ((x.name == "MainMenuFromBoot" && EntryPoint.interruptMenuLoad) || (x._isGameplay && EntryPoint.interruptGameLoad))
                 {
                     LoadingError e = EntryPoint.error;
                     GameContext.Instance.UITemplates.CreatePositivePopupPrompt(ScriptableObjectUtils.CreateScriptable(new Action<PositivePopupPromptConfig>(config =>
                     {
-                        config.activateActionsDelay = 0;
-                        config.expirationDuration = 0;
-                        config.expires = false;
-                        config.message = TranslationPatcher.AddTranslation("UI", "m.srml_load_error.error", $"{e.LoadingStep} error from '{e.ModName}': {e.Exception.Message}");
-                        config.shouldDimBackground = true;
-                        config.title =   TranslationPatcher.AddTranslation("UI", "m.srml_load_error.title", "mSRML Error"); ;
-                        config.positiveButtonText = TranslationPatcher.AddTranslation("UI", "m.srml_load_error.quit", "EXIT");
+                        config._activateActionsDelay = 0;
+                        config._expirationDuration = 0;
+                        config._expires = false;
+                        config._message = TranslationPatcher.AddTranslation("UI", "m.srml_load_error.error", $"{e.LoadingStep} error from '{e.ModName}': {e.Exception.Message}");
+                        config._shouldDimBackground = true;
+                        config._title =   TranslationPatcher.AddTranslation("UI", "m.srml_load_error.title", "mSRML Error"); ;
+                        config._positiveButtonText = TranslationPatcher.AddTranslation("UI", "m.srml_load_error.quit", "EXIT");
 
                     })), new Action(Application.Quit));
                     

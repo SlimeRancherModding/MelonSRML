@@ -27,7 +27,8 @@ namespace MelonSRML.Patches.SaveSystem
         {
             // PEDIA
             foreach (var pediaEntry in PediaRegistry.pediasToPatch)
-                __instance.pediaEntryLookup.TryAdd(pediaEntry.GetPersistenceId(), pediaEntry);
+                if (pediaEntry)
+                    __instance.pediaEntryLookup.TryAdd(pediaEntry.GetPersistenceId(), pediaEntry);
 
             // WEATHER
             var stateTranslation = __instance._weatherStateTranslation;

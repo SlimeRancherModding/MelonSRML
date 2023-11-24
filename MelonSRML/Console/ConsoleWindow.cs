@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Il2CppInterop.Runtime;
 using Il2CppMonomiPark.SlimeRancher.UI;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace MelonSRML.Console
@@ -180,7 +181,7 @@ namespace MelonSRML.Console
 
 
             if (SRSingleton<GameContext>.Instance != null)
-                if (SRSingleton<GameContext>.Instance.AutoSaveDirector.loadingGame && showWindow)
+                if (SceneManager.GetSceneByName("LoadScene").isLoaded && showWindow)
                 {
                     SetWindowOff();
                 }
@@ -190,7 +191,7 @@ namespace MelonSRML.Console
             if (Event.current.isKey && Event.current.type == EventType.KeyDown)
             {
                 // TOGGLES THE WINDOW
-                if ((Event.current.modifiers == EventModifiers.Control || Event.current.modifiers == EventModifiers.Command) && Event.current.keyCode == KeyCode.Tab && !GameContext.Instance.AutoSaveDirector.loadingGame)
+                if ((Event.current.modifiers == EventModifiers.Control || Event.current.modifiers == EventModifiers.Command) && SceneManager.GetSceneByName("LoadScene").isLoaded)
                 {
                     ToggleWindow();
                 }
@@ -678,7 +679,7 @@ namespace MelonSRML.Console
                 {
                     cursorlockHandler.SetEnableCursor(true);
                     if (!SceneContext.Instance.TimeDirector.HasPauser())
-                        SceneContext.Instance.TimeDirector.Pause(true);
+                        SceneContext.Instance.TimeDirector.Pause();
                     else
                         hasAlreadyPaused = true;
                 }
@@ -703,7 +704,7 @@ namespace MelonSRML.Console
                 {
                     if (!hasAlreadyPaused)
                     {
-                        SceneContext.Instance.TimeDirector.Unpause(true);
+                        SceneContext.Instance.TimeDirector.Unpause();
                         cursorlockHandler.SetEnableCursor(false);
                     }
                 }
@@ -733,7 +734,7 @@ namespace MelonSRML.Console
             {
                 if (!hasAlreadyPaused)
                 {
-                    SceneContext.Instance.TimeDirector.Unpause(true);
+                    SceneContext.Instance.TimeDirector.Unpause();
                     cursorlockHandler.SetEnableCursor(false);
                 }
             }

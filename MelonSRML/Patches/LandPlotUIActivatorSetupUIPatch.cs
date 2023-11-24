@@ -17,7 +17,7 @@ namespace MelonSRML.Patches
         public static List<LandPlot.Id> LandPlotsOnce = new List<LandPlot.Id>();
         public static void Prefix(LandPlotUIActivator __instance, GameObject ui)
         {
-            var landPlotTypeId = __instance.landPlot.typeId;
+            var landPlotTypeId = __instance.landPlot.TypeId;
             if (LandPlotsOnce.FirstOrDefault(x => x ==landPlotTypeId) != LandPlot.Id.NONE)
                 return;
             
@@ -31,20 +31,20 @@ namespace MelonSRML.Patches
                          {
                              var tocapitalize = landPlotShopEntry.plot.ToString().FirstCharToUpper();
                              model.name = tocapitalize + " Patch";
-                             model.description = landPlotShopEntry.DescKey;
-                             model.title =  landPlotShopEntry.NameKey;
-                             model.icon = landPlotShopEntry.icon;
+                             model._description = landPlotShopEntry.DescKey;
+                             model._title =  landPlotShopEntry.NameKey;
+                             model._icon = landPlotShopEntry.icon;
                              var purchaseCost = PurchaseCost.CreateEmpty();
                              purchaseCost.newbuckCost = landPlotShopEntry.cost;
-                             model.purchaseCost = purchaseCost;
+                             model._purchaseCost = purchaseCost;
                              model.IsAvailable = landPlotShopEntry.isUnlocked;
                              model.IsHidden = landPlotShopEntry.isHidden;
-                             model.pediaEntry = landPlotShopEntry.pediaEntry;
-                             model.actionButtonLabel = fromIndexInList.actionButtonLabel;
-                             model.infoButtonLabel = fromIndexInList.infoButtonLabel;
-                             model.promptMessage = fromIndexInList.promptMessage;
-                             model.plotDefinition = ScriptableObjectUtils.CreateScriptable<PlotDefinition>(definition =>definition.name = landPlotShopEntry.plot.ToString().FirstCharToUpper());
-                             model.plotPrefab = SRSingleton<GameContext>.Instance.LookupDirector.GetPlotPrefab(landPlotShopEntry.plot);
+                             model._pediaEntry = landPlotShopEntry.pediaEntry;
+                             model._actionButtonLabel = fromIndexInList.ActionButtonLabel;
+                             model._infoButtonLabel = fromIndexInList.InfoButtonLabel;
+                             model._promptMessage = fromIndexInList.PromptMessage;
+                             model._plotDefinition = ScriptableObjectUtils.CreateScriptable<PlotDefinition>(definition =>definition.name = landPlotShopEntry.plot.ToString().FirstCharToUpper());
+                             model._plotPrefab = SRSingleton<GameContext>.Instance.LookupDirector.GetPlotPrefab(landPlotShopEntry.plot);
                         
                          }))
                     objectFromIndexInList.items.Add(plotPurchaseItemModel);
@@ -62,17 +62,17 @@ namespace MelonSRML.Patches
                         {
                             var tocapitalize = landPlotShopEntry.upgrade.ToString().FirstCharToUpper();
                             model.name = tocapitalize + " Upgrade";
-                            model.upgrade = landPlotShopEntry.upgrade;
-                            model.description = landPlotShopEntry.DescKey; 
-                            model.title = landPlotShopEntry.NameKey;
-                            model.icon = landPlotShopEntry.icon;
-                            model.pediaEntry = landPlotShopEntry.pediaEntry;
-                            model.promptMessage = plotPurchaseItemModel.promptMessage;
+                            model._upgrade = landPlotShopEntry.upgrade;
+                            model._description = landPlotShopEntry.DescKey; 
+                            model._title = landPlotShopEntry.NameKey;
+                            model._icon = landPlotShopEntry.icon;
+                            model._pediaEntry = landPlotShopEntry.pediaEntry;
+                            model._promptMessage = plotPurchaseItemModel.PromptMessage;
                             var purchaseCost = PurchaseCost.CreateEmpty();
                             purchaseCost.newbuckCost = landPlotShopEntry.cost;
-                            model.purchaseCost = purchaseCost;
-                            model.actionButtonLabel = plotPurchaseItemModel.actionButtonLabel;
-                            model.infoButtonLabel = plotPurchaseItemModel.infoButtonLabel;
+                            model._purchaseCost = purchaseCost;
+                            model._actionButtonLabel = plotPurchaseItemModel.ActionButtonLabel;
+                            model._infoButtonLabel = plotPurchaseItemModel.InfoButtonLabel;
                             model.IsAvailable = landPlotShopEntry.isAvailable;
                             model.IsHidden = landPlotShopEntry.isHidden;
                         }));

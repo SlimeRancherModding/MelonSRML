@@ -44,9 +44,9 @@ namespace MelonSRML.Console.Commands
             {
                 var actorValue = v.Value;
                 var actorTransform = actorValue?.transform;
-                var actorPosition = actorTransform?.position ?? SceneContext.Instance.PlayerState.model.position;
+                var actorPosition = actorTransform?.position ?? SceneContext.Instance.PlayerState._model.position;
 
-                if (radius == -1 || Vector3.Distance(actorPosition, SceneContext.Instance.PlayerState.model.position) < radius)
+                if (radius == -1 || Vector3.Distance(actorPosition, SceneContext.Instance.PlayerState._model.position) < radius)
                 {
                     if (toKill.Count == 0 || toKill.FirstOrDefault(x => x == actorValue.ident))
                     {

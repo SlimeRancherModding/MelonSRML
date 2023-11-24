@@ -15,7 +15,7 @@ namespace MelonSRML.SR2
 {
     public static class PediaRegistry
     {
-        internal static HashSet<PediaEntry> addedPedias = new HashSet<PediaEntry>();
+        internal static HashSet<PediaEntry> pediasToPatch = new HashSet<PediaEntry>();
 
         public static string CreatePediaKey(string prefix, string localizationSuffix)
         { return "m." + prefix + "." + localizationSuffix; }
@@ -243,8 +243,8 @@ namespace MelonSRML.SR2
 
             if (!pediaEntryCategory._items.ToArray().FirstOrDefault(x => x == identifiablePediaEntry))
                 pediaEntryCategory._items = pediaEntryCategory._items.ToArray().AddToArray(identifiablePediaEntry);
-            if (!addedPedias.Contains(identifiablePediaEntry))
-                addedPedias.Add(identifiablePediaEntry);
+            if (!pediasToPatch.Contains(identifiablePediaEntry))
+                pediasToPatch.Add(identifiablePediaEntry);
 
             return identifiablePediaEntry;
         }
@@ -263,8 +263,8 @@ namespace MelonSRML.SR2
 
             if (!basePediaEntryCategory.Items.ToArray().FirstOrDefault(x => x == identifiablePediaEntry))
                 basePediaEntryCategory._items = basePediaEntryCategory._items.ToArray().AddToArray(identifiablePediaEntry);
-            if (!addedPedias.Contains(identifiablePediaEntry))
-                addedPedias.Add(identifiablePediaEntry);
+            if (!pediasToPatch.Contains(identifiablePediaEntry))
+                pediasToPatch.Add(identifiablePediaEntry);
 
             return identifiablePediaEntry;
         }
@@ -284,8 +284,8 @@ namespace MelonSRML.SR2
 
             if (!basePediaEntryCategory.Items.ToArray().FirstOrDefault(x => x == tutorialPediaEntry))
                 basePediaEntryCategory._items = basePediaEntryCategory._items.ToArray().AddToArray(tutorialPediaEntry);
-            if (!addedPedias.Contains(tutorialPediaEntry))
-                addedPedias.Add(tutorialPediaEntry);
+            if (!pediasToPatch.Contains(tutorialPediaEntry))
+                pediasToPatch.Add(tutorialPediaEntry);
 
             return tutorialPediaEntry;
         }

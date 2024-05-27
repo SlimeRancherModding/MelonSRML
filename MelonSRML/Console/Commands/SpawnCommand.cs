@@ -41,7 +41,7 @@ namespace MelonSRML.Console.Commands
             {
                 if (Physics.Raycast(new Ray(Camera.main.transform.position, Camera.main.transform.forward), out var hit))
                 {
-                    var spawned = SRBehaviour.InstantiateActor(prefab, SceneContext.Instance.RegionRegistry.CurrentSceneGroup, Vector3.zero, Quaternion.identity);
+                    var spawned = InstantiationHelpers.InstantiateActor(prefab, SceneContext.Instance.RegionRegistry.CurrentSceneGroup, Vector3.zero, Quaternion.identity);
                     if (spawned.GetComponent<Collider>() != null)
                         spawned.transform.position = hit.point+hit.normal*PhysicsUtil.CalcRad(spawned.GetComponent<Collider>());
                     var delta = -(hit.point - Camera.main.transform.position).normalized;

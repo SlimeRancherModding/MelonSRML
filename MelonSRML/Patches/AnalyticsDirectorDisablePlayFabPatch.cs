@@ -9,7 +9,7 @@ namespace MelonSRML.Patches
         public static bool Prefix() => false;
     }
 
-    [HarmonyPatch(typeof(AnalyticsDirector), "SendPlayerEvent")]
+    [HarmonyPatch(typeof(AnalyticsDirector), "SendEvent")]
     internal static class AnalyticsDirectorDisablePlayFabWarningsPatch
     {
         public static bool Prefix() => false;

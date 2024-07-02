@@ -102,6 +102,9 @@ namespace MelonSRML.SR2
             if (!pediaCategory)
                 return;
 
+            if (!pediaCategory._items.Contains(pediaEntry))
+                pediaCategory._items = pediaCategory._items.AddItem(pediaEntry).ToArray();
+
             LookupDirector director = SRSingleton<GameContext>.Instance.LookupDirector;
             if (!director._categories[director._categories.IndexOf(pediaCategory.GetRuntimeCategory())].Contains(pediaEntry))
                 director.AddPediaEntryToCategory(pediaEntry, pediaCategory);

@@ -25,8 +25,8 @@ namespace MelonSRML.SR2
             return (ScriptableObjectUtils.CreateScriptable<IdentifiableTypeGroup>(group =>
             {
                 group.name = foodGroup.ToString().ToLower().FirstCharToUpper() + "Group";
-                group.icon = icon;
-                group.localizedName = localizedString;
+                group._icon = icon;
+                group._localizedName = localizedString;
                 foreach (var identifiableType in identifiableTypes)
                 {
                     if (!addedFoodGroups.TryGetValue(foodGroup, out var list))
@@ -39,7 +39,7 @@ namespace MelonSRML.SR2
 
                     list.Add(identifiableType);
 
-                    group.memberTypes.Add(identifiableType);
+                    group._memberTypes.Add(identifiableType);
                 }
 
             }), localizedString);
@@ -59,7 +59,7 @@ namespace MelonSRML.SR2
 
                 }
                 list.Add(identifiableType); 
-                identifiableTypeGroup.memberTypes.Add(identifiableType);
+                identifiableTypeGroup._memberTypes.Add(identifiableType);
             }
         }
         

@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using Il2CppMonomiPark.SlimeRancher.Player.PlayerItems;
 
 namespace MelonSRML.Patches;
 

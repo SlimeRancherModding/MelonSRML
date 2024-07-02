@@ -5,8 +5,6 @@ using Il2CppMonomiPark.SlimeRancher;
 using Il2CppMonomiPark.SlimeRancher.DataModel;
 using Il2CppMonomiPark.SlimeRancher.Persist;
 using Il2CppMonomiPark.SlimeRancher.Weather;
-using MelonSRML.SR2;
-using MelonSRML.Utils.Extensions;
 
 namespace MelonSRML.Patches.SaveSystem
 {
@@ -26,10 +24,11 @@ namespace MelonSRML.Patches.SaveSystem
 
         public static void Prefix(SavedGame __instance)
         {
+            // Adding to `pediaEntryLookup` is no longer needed due to the 0.5.0 update.
             // PEDIA
-            foreach (var pediaEntry in PediaRegistry.pediasToPatch)
+/*            foreach (var pediaEntry in PediaRegistry.pediasToPatch)
                 if (pediaEntry)
-                    __instance.pediaEntryLookup.TryAdd(pediaEntry.PersistenceId, pediaEntry);
+                    __instance.pediaEntryLookup.TryAdd(pediaEntry.PersistenceId, pediaEntry);*/
 
             // WEATHER
             var stateTranslation = __instance._weatherStateTranslation;

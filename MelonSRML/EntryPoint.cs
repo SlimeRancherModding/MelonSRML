@@ -13,6 +13,12 @@ using Il2CppMonomiPark.SlimeRancher.Damage;
 using MelonSRML.Console;
 using MelonSRML.EnumPatcher;
 using MelonSRML.SR2.Ranch;
+using MelonSRML.SR2.Translation;
+using MelonSRML.SR2;
+using Il2CppMonomiPark.SlimeRancher.Pedia;
+using System.Linq;
+using UnityEngine.Localization;
+using Il2CppMonomiPark.SlimeRancher.Script.Util;
 
 namespace MelonSRML
 {

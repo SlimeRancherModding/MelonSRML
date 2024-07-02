@@ -2,7 +2,7 @@
 {
     public abstract class SRMLMelonMod : MelonMod
     {
-        public virtual void PreRegister(AutoSaveDirector autoSaveDirector)
+        public virtual void PreRegister(LookupDirector lookupDirector)
         {
         }
 

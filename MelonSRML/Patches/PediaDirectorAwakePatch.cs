@@ -13,12 +13,9 @@ namespace MelonSRML.Patches
         {
             foreach (var pediaEntry in PediaRegistry.pediasToPatch)
             {
-                var identPediaEntry = pediaEntry.TryCast<IdentifiablePediaEntry>();
-                if (identPediaEntry)
-                    __instance._identDict.TryAdd(identPediaEntry.IdentifiableType, pediaEntry);
-
-                if (pediaEntry.IsUnlockedInitially)
-                    __instance._initUnlocked = __instance._initUnlocked.AddItem(pediaEntry).ToArray();
+                if (!pediaEntry)
+                    continue;
+                pediaEntry._unlockInfoProvider = __instance.Cast<IUnlockInfoProvider>();
             }
         }
     }

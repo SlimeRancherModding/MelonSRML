@@ -27,14 +27,14 @@ namespace MelonSRML.SR2.Ranch
 
         public static void RegisterPurchasableLandPlot(LandPlotShopEntry entry, GameObject prefab)
         {
-            SRSingleton<GameContext>.Instance.LookupDirector.plotPrefabs.AddAndRemoveRangeWhere(new[] { prefab }, (o, gameObject) => o.GetComponentInChildren<LandPlot>().TypeId == gameObject.GetComponentInChildren<LandPlot>().TypeId);
+            SRSingleton<GameContext>.Instance.LookupDirector._plotPrefabs.AddAndRemoveRangeWhere(new[] { prefab }, (o, gameObject) => o.GetComponentInChildren<LandPlot>().TypeId == gameObject.GetComponentInChildren<LandPlot>().TypeId);
             var typeId = prefab.GetComponentInChildren<LandPlot>().TypeId;
-            if (SRSingleton<GameContext>.Instance.LookupDirector.plotPrefabDict.ContainsKey(typeId))
+            if (SRSingleton<GameContext>.Instance.LookupDirector._plotPrefabDict.ContainsKey(typeId))
             {
-                SRSingleton<GameContext>.Instance.LookupDirector.plotPrefabDict.Remove(typeId);
+                SRSingleton<GameContext>.Instance.LookupDirector._plotPrefabDict.Remove(typeId);
             }
 
-            SRSingleton<GameContext>.Instance.LookupDirector.plotPrefabDict.Add(typeId, prefab);
+            SRSingleton<GameContext>.Instance.LookupDirector._plotPrefabDict.Add(typeId, prefab);
             moddedLandPlotShopEntries.Add(entry);
         }
         

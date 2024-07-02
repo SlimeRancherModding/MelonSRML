@@ -7,9 +7,9 @@
 	<DebugType>embedded</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony">
-      <HintPath>Dependencies\0Harmony.dll</HintPath>
-    </Reference>
+	<Reference Include="0Harmony">
+		<HintPath>Dependencies\0Harmony.dll</HintPath>
+	</Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>Dependencies\Assembly-CSharp.dll</HintPath>
     </Reference>

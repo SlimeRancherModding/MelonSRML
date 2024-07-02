@@ -15,6 +15,6 @@ public static class IdentifiableTypeListExtensions
                 return;
         }
 
-        @this.memberTypes.Add(identifiableType);
+        @this._memberTypes.Add(identifiableType);
     }
 }

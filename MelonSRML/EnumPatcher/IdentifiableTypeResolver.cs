@@ -30,14 +30,14 @@ namespace MelonSRML.EnumPatcher
             }
         }
 
-        public static void RegisterAllIdentifiables(AutoSaveDirector dir, SRMLMelonMod mod = null)
+        public static void RegisterAllIdentifiables(LookupDirector dir, SRMLMelonMod mod = null)
         {
             if (AllTypeGroupsList == null)
             {
                 AllTypeGroupsList = new List<IdentifiableTypeGroup>();
                 foreach (var VARIABLE in SRLookup.Get<IdentifiableTypeGroupList>("All Type Groups List").items)
                 {
-                    if (VARIABLE.memberGroups.Count == 0)
+                    if (VARIABLE._memberGroups.Count == 0)
                     {
                         AllTypeGroupsList.Add(VARIABLE);
                     }
@@ -93,7 +93,7 @@ namespace MelonSRML.EnumPatcher
                             }
 
                         if (shouldRegister)
-                            dir.identifiableTypes.AddIfNotContaining(identifiableType);
+                            SRLookup.Get<IdentifiableTypeGroup>("IdentifiableTypeGroups").AddIfNotContaining(identifiableType);
                     }
                 }
             }

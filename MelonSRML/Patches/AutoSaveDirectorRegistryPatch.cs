@@ -4,7 +4,7 @@ using MelonSRML.EnumPatcher;
 
 namespace MelonSRML.Patches
 {
-    [HarmonyPatch(typeof(AutoSaveDirector), "Awake")]
+/*    [HarmonyPatch(typeof(AutoSaveDirector), "Awake")]
     internal static class AutoSaveDirectorRegistryPatch
     {
         public static void Prefix(AutoSaveDirector __instance)
@@ -30,5 +30,5 @@ namespace MelonSRML.Patches
             }
             IdentifiableTypeResolver.CategorizeAllIdentifiables();
         }
-    }
+    }*/
 }
